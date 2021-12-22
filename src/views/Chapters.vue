@@ -66,7 +66,8 @@
 							v-for="(chapter, value) in this.lesson.chapter"
 							:key="value"
 							link
-							:disabled="chapter.tutorial_status == 'Locked'"
+							:to="`${chapter.chapter_number}`"
+							:disabled="chapter.tutorial_status == 'sd'"
 						>
 							<div class="chapCon">
 								<div class="chapterNumber">

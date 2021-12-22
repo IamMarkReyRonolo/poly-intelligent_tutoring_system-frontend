@@ -11,6 +11,10 @@ import Developers from "../views/Developers.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Lessons from "../views/Lessons.vue";
 import Chapters from "../views/Chapters.vue";
+import Lesson1_1 from "../components/Lesson1/Chapter1.vue";
+import Lesson1_2 from "../components/Lesson1/Chapter2.vue";
+import Lesson1_3 from "../components/Lesson1/Chapter3.vue";
+import Lesson1_4 from "../components/Lesson1/Final.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -24,6 +28,11 @@ const routes = [
 	{ path: "/dashboard", component: Dashboard },
 	{ path: "/lessons", component: Lessons },
 	{ path: "/:lessonName/chapters", component: Chapters },
+
+	{ path: "/Intro_To_Polynomials/1", component: Lesson1_1 },
+	{ path: "/Intro_To_Polynomials/2", component: Lesson1_2 },
+	{ path: "/Intro_To_Polynomials/3", component: Lesson1_3 },
+	{ path: "/Intro_To_Polynomials/4", component: Lesson1_4 },
 
 	{ path: "*", component: NotFound },
 ];

@@ -1,4 +1,4 @@
-# shipping-system-frontend
+# poly-ui
 
 ## Project setup
 ```

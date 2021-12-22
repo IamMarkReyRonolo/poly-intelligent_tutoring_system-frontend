@@ -34,27 +34,109 @@
 				</div>
 
 				<div class="content">
-					<div class="video">
-						<iframe
-							width="700"
-							height="400"
-							src="https://www.youtube.com/embed/O65fxp7DKMc?list=PLmdFyQYShrjdt-k5SisnnaHZH3XbZDVOY"
-							title="YouTube video player"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-						></iframe>
-					</div>
+					<div class="video"></div>
 
-					<h2>Polynomial Equations</h2>
+					<h2>
+						<a class="link" href="/Intro_To_Polynomials/1"
+							>1. Definition and Degree of Polynomial</a
+						>
+					</h2>
 					<br />
 					<p>
-						Polynomial equations are one of the significant concepts of
-						Mathematics, where the relation between numbers and variables are
-						explained in a pattern. In Maths, we have studied a variety of
-						equations formed with algebraic expressions. When we talk about
-						polynomials, it is also a form of the algebraic equation.
+						A polynomial is defined as an expression which is composed of
+						variables, constants and exponents, that are combined using the
+						mathematical operations such as addition, subtraction,
+						multiplication and division (No division operation by a variable).
 					</p>
+
+					<ul>
+						<li>Constants. Example: 1, 2, 3, etc.</li>
+						<li>Variables. Example: g, h, x, y, etc.</li>
+						<li>Exponents: Example: 5 in x<sup>5</sup> etc.</li>
+					</ul>
+					<br />
+					<p>
+						The degree of a polynomial is defined as the highest degree of a
+						monomial within a polynomial. Thus, a polynomial equation having one
+						variable which has the largest exponent is called a degree of the
+						polynomial.
+					</p>
+
+					<br />
+					<br />
+
+					<h2>
+						<a class="link" href="/Intro_To_Polynomials/1"
+							>2. Terms and Types of Polynomials</a
+						>
+					</h2>
+					<br />
+					<p>
+						The terms of polynomials are the parts of the equation which are
+						generally separated by “+” or “-” signs. So, each part of a
+						polynomial in an equation is a term.
+					</p>
+
+					<div class="table">
+						<v-simple-table>
+							<template v-slot:default>
+								<thead>
+									<tr>
+										<th class="text-left">
+											Polynomial
+										</th>
+										<th class="text-left">
+											Terms
+										</th>
+										<th class="text-left">
+											Degree
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>P(x) = x<sup>3</sup>-2x<sup>2</sup>+3x+4</td>
+										<td>x<sup>3</sup>, -2x<sup>2</sup>, 3x and 4</td>
+										<td>3</td>
+									</tr>
+								</tbody>
+							</template>
+						</v-simple-table>
+					</div>
+
+					<br />
+					<p>
+						Polynomials are of 3 different types and are classified based on the
+						number of terms in it. The three types of polynomials are:
+					</p>
+					<h3>Monomial</h3>
+					<br />
+					<p>
+						A monomial is an expression which contains only one term. For an
+						expression to be a monomial, the single term should be a non-zero
+						term. A few examples of monomials are:
+					</p>
+
+					<h3>Binomial</h3>
+					<br />
+					<p>
+						A binomial is a polynomial expression which contains exactly two
+						terms. A binomial can be considered as a sum or difference between
+						two or more monomials. A few examples of binomials are:
+					</p>
+
+					<h3>Trinomial</h3>
+					<br />
+					<p>
+						A trinomial is an expression which is composed of exactly three
+						terms. A few examples of trinomial expressions are:
+					</p>
+
+					<h2>
+						<a class="link" href="/Intro_To_Polynomials/1"
+							>3. Polynomial Equations and Functions</a
+						>
+					</h2>
 					<br />
 					<p>
 						An equation formed with
@@ -70,70 +152,12 @@
 							<strong>2x<sup>2</sup> + 5x + 20 = 0</strong>
 						</li>
 					</ul>
-
-					<div class="popQ">
-						<div class="question">
-							<p>
-								What is a valid polynomial equation?
-							</p>
-						</div>
-						<div class="choices">
-							<v-btn
-								width="150"
-								large
-								:class="answered1 ? 'error' : ''"
-								@click="answerPQ1('wrong')"
-								>2x<sup>-2</sup> + 20</v-btn
-							>
-							<v-btn
-								width="150"
-								large
-								:class="answered1 ? 'error' : ''"
-								@click="answerPQ1('wrong')"
-								>5x<sup>3</sup> + 3x + 4</v-btn
-							>
-							<v-btn
-								width="150"
-								large
-								:class="answered1 ? 'error' : ''"
-								@click="answerPQ1('wrong')"
-								>5<sup>2</sup> = 0</v-btn
-							>
-							<v-btn
-								width="150"
-								large
-								:class="answered1 ? 'success' : ''"
-								@click="answerPQ1('correct')"
-								>2x<sup>3</sup> + 10x = 4</v-btn
-							>
-						</div>
-						<div class="feedback" v-if="answered1">
-							<v-btn text v-if="correct1" class="success" x-small
-								>Your answer is correct</v-btn
-							>
-							<v-btn text v-if="!correct1" class="error" x-small
-								>Your answer is incorrect</v-btn
-							>
-						</div>
-					</div>
-
-					<br />
-					<br />
-
-					<h2>Polynomial Function</h2>
-
 					<br />
 					<p>
-						A polynomial function is a function that can be expressed in the
-						form of a polynomial. The definition can be derived from the
-						definition of a polynomial equation. A polynomial is generally
-						represented as P(x). The highest power of the variable of P(x) is
-						known as its degree.
-					</p>
-					<p>
-						A polynomial function has only positive integers as exponents. We
-						can even perform different types of arithmetic operations for such
-						functions like addition, subtraction, multiplication and division.
+						A polynomial function is generally represented as P(x). It has only
+						positive integers as exponents. We can even perform different types
+						of arithmetic operations for such functions like addition,
+						subtraction, multiplication and division.
 					</p>
 
 					<p>Some of the examples of polynomial functions are here:</p>
@@ -147,65 +171,8 @@
 						</li>
 					</ul>
 
-					<br />
-
-					<div class="popQ">
-						<div class="question">
-							<p>
-								What is a valid polynomial function?
-							</p>
-						</div>
-						<div class="choices">
-							<v-btn
-								width="150"
-								large
-								:class="answered2 ? 'success' : ''"
-								@click="answerPQ2('correct')"
-								>5x<sup>3</sup> + 3x + 4</v-btn
-							>
-							<v-btn
-								width="150"
-								large
-								:class="answered2 ? 'error' : ''"
-								@click="answerPQ2('wrong')"
-								>x<sup>-3</sup> + x + 1</v-btn
-							>
-							<v-btn
-								width="150"
-								large
-								:class="answered2 ? 'error' : ''"
-								@click="answerPQ2('wrong')"
-								>2 + 4 = 6</v-btn
-							>
-							<v-btn
-								width="150"
-								large
-								:class="answered2 ? 'error' : ''"
-								@click="answerPQ2('wrong')"
-								>x<sup>3/2</sup> + 2x + 10</v-btn
-							>
-						</div>
-						<div class="feedback" v-if="answered2">
-							<v-btn text v-if="correct2" class="success" x-small
-								>Your answer is correct</v-btn
-							>
-							<v-btn text v-if="!correct2" class="error" x-small
-								>Your answer is incorrect</v-btn
-							>
-						</div>
-					</div>
-
 					<div class="next">
-						<p class="warn" v-if="!answered1 || !answered2">
-							You need to answer all example questions to proceed.
-						</p>
-						<v-btn
-							large
-							class="success"
-							rounded
-							:disabled="!answered1 || !answered2"
-							>Take Exercise</v-btn
-						>
+						<v-btn large class="success" rounded>Take Exercise</v-btn>
 					</div>
 				</div>
 			</div>
@@ -382,6 +349,11 @@
 		padding: 50px;
 	}
 
+	.table {
+		max-width: 600px;
+		margin: 20px auto;
+	}
+
 	.popQ {
 		box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
 			0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
@@ -432,5 +404,16 @@
 
 	.err h2 {
 		padding: 20px;
+	}
+
+	a {
+		color: green;
+		text-decoration: none;
+		outline: none;
+	}
+
+	.link {
+		color: #4caf50;
+		text-decoration: none;
 	}
 </style>

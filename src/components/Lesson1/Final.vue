@@ -172,7 +172,7 @@
 					</ul>
 
 					<div class="next">
-						<v-btn large class="success" rounded>Take Exercise</v-btn>
+						<v-btn large class="success" rounded>Take Test</v-btn>
 					</div>
 				</div>
 			</div>

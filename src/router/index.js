@@ -23,6 +23,8 @@ import Lesson2_3 from "../components/Lesson2/Chapter3.vue";
 import Lesson2_4 from "../components/Lesson2/Chapter4.vue";
 import Lesson2_5 from "../components/Lesson2/Final.vue";
 
+import Lesson3_1 from "../components/Lesson3/Chapter1.vue";
+import Lesson3_2 from "../components/Lesson3/Final.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -47,6 +49,9 @@ const routes = [
 	{ path: "/Polynomial_Operations/3", component: Lesson2_3 },
 	{ path: "/Polynomial_Operations/4", component: Lesson2_4 },
 	{ path: "/Polynomial_Operations/5", component: Lesson2_5 },
+
+	{ path: "/Solving_Linear_Polynomials/1", component: Lesson3_1 },
+	{ path: "/Solving_Linear_Polynomials/2", component: Lesson3_2 },
 
 	{ path: "*", component: NotFound },
 ];

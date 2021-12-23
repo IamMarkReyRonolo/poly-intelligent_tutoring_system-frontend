@@ -11,10 +11,18 @@ import Developers from "../views/Developers.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Lessons from "../views/Lessons.vue";
 import Chapters from "../views/Chapters.vue";
+
 import Lesson1_1 from "../components/Lesson1/Chapter1.vue";
 import Lesson1_2 from "../components/Lesson1/Chapter2.vue";
 import Lesson1_3 from "../components/Lesson1/Chapter3.vue";
 import Lesson1_4 from "../components/Lesson1/Final.vue";
+
+import Lesson2_1 from "../components/Lesson2/Chapter1.vue";
+import Lesson2_2 from "../components/Lesson2/Chapter2.vue";
+import Lesson2_3 from "../components/Lesson2/Chapter3.vue";
+import Lesson2_4 from "../components/Lesson2/Chapter4.vue";
+import Lesson2_5 from "../components/Lesson2/Final.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -33,6 +41,12 @@ const routes = [
 	{ path: "/Intro_To_Polynomials/2", component: Lesson1_2 },
 	{ path: "/Intro_To_Polynomials/3", component: Lesson1_3 },
 	{ path: "/Intro_To_Polynomials/4", component: Lesson1_4 },
+
+	{ path: "/Polynomial_Operations/1", component: Lesson2_1 },
+	{ path: "/Polynomial_Operations/2", component: Lesson2_2 },
+	{ path: "/Polynomial_Operations/3", component: Lesson2_3 },
+	{ path: "/Polynomial_Operations/4", component: Lesson2_4 },
+	{ path: "/Polynomial_Operations/5", component: Lesson2_5 },
 
 	{ path: "*", component: NotFound },
 ];

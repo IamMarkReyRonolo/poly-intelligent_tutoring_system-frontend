@@ -15,11 +15,15 @@
 		</div>
 
 		<div class="fetched" v-if="fetched">
-			<div class="imageCon"><img src="../assets/Picture1.png" alt="" /></div>
+			<div class="imageCon">
+				<img src="../assets/Picture1.png" alt="" />
+			</div>
 
 			<div class="main">
 				<div class="profile">
-					<v-avatar color="grey" size="40" class="profileAvatar"></v-avatar>
+					<v-avatar color="grey" size="40" class="profileAvatar"
+						><img src="../assets/yow.jpg" alt=""
+					/></v-avatar>
 					<v-btn text class="profileTitle" small to="/dashboard">Profile</v-btn>
 				</div>
 

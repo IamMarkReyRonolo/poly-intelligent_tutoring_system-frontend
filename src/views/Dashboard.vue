@@ -21,7 +21,14 @@
 				<div class="profile">
 					<h2 class="profileTitle">Profile</h2>
 					<v-avatar color="grey" size="150"
-						><img src="../assets/yow.jpg" alt=""
+						><img
+							v-if="this.user.gender == 'Male'"
+							src="../assets/avatar-man.png"
+							alt=""/>
+						<img
+							v-if="this.user.gender == 'Female'"
+							src="../assets/avatar-woman.png"
+							alt=""
 					/></v-avatar>
 					<h2>{{ this.user.name.firstName }} {{ this.user.name.lastName }}</h2>
 					<p>{{ this.user.gender }} | {{ this.user.age }}</p>

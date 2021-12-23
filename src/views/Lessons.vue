@@ -19,7 +19,9 @@
 
 			<div class="main">
 				<div class="profile">
-					<v-avatar color="grey" size="40" class="profileAvatar"></v-avatar>
+					<v-avatar color="grey" size="40" class="profileAvatar">
+						<img src="../assets/yow.jpg" alt="" />
+					</v-avatar>
 					<v-btn text class="profileTitle" small to="/dashboard">Profile</v-btn>
 				</div>
 				<h1 class="lessonHeader">Lessons</h1>
@@ -57,7 +59,7 @@
 									x-large
 									class="titleBtn"
 									to="/Polynomial_Operations/chapters"
-									:disabled="this.lessons[1].status == 'Locked'"
+									:disabled="this.lessons[1].status == 'sd'"
 									>{{ this.lessons[1].name }}</v-btn
 								>
 								<p>
@@ -79,7 +81,7 @@
 									x-large
 									class="titleBtn"
 									to="/Solving_Linear_Polynomials/chapters"
-									:disabled="this.lessons[2].status == 'Locked'"
+									:disabled="this.lessons[2].status == 'asd'"
 									>{{ this.lessons[2].name }}</v-btn
 								>
 								<p>

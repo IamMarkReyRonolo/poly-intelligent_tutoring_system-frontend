@@ -25,6 +25,8 @@ import Lesson2_5 from "../components/Lesson2/Final.vue";
 
 import Lesson3_1 from "../components/Lesson3/Chapter1.vue";
 import Lesson3_2 from "../components/Lesson3/Final.vue";
+
+import Confirmation from "../views/Confirmation.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -52,6 +54,11 @@ const routes = [
 
 	{ path: "/Solving_Linear_Polynomials/1", component: Lesson3_1 },
 	{ path: "/Solving_Linear_Polynomials/2", component: Lesson3_2 },
+
+	{
+		path: "/:lessonName/:chapterName/:chapterNumber/confirmation",
+		component: Confirmation,
+	},
 
 	{ path: "*", component: NotFound },
 ];

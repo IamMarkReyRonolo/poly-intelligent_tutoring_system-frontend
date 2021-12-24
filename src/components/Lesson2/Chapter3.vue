@@ -152,7 +152,12 @@
 						<p class="warn" v-if="!answered2">
 							You need to answer all example questions to proceed.
 						</p>
-						<v-btn large class="success" rounded :disabled="!answered2"
+						<v-btn
+							large
+							class="success"
+							rounded
+							:disabled="!answered2"
+							to="Multiplication of Polynomials/3/confirmation"
 							>Take Exercise</v-btn
 						>
 					</div>

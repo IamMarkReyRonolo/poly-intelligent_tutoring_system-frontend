@@ -188,7 +188,9 @@
 					<br />
 
 					<div class="next">
-						<v-btn large class="success" rounded>Take Test</v-btn>
+						<v-btn large class="success" rounded to="Final Test/5/confirmation"
+							>Take Test</v-btn
+						>
 					</div>
 				</div>
 			</div>

@@ -259,6 +259,7 @@
 							class="success"
 							rounded
 							:disabled="!answered1 || !answered2"
+							to="Terms and Types of Polynomials/2/confirmation"
 							>Take Exercise</v-btn
 						>
 					</div>

@@ -204,6 +204,7 @@
 							class="success"
 							rounded
 							:disabled="!answered1 || !answered2"
+							to="Polynomial Equations and Functions/3/confirmation"
 							>Take Exercise</v-btn
 						>
 					</div>

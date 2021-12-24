@@ -228,6 +228,7 @@
 							class="success"
 							rounded
 							:disabled="!answered1 || !answered2"
+							to="Definition and Degree of a Polynomial/1/confirmation"
 							>Take Exercise</v-btn
 						>
 					</div>

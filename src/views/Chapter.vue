@@ -1,6 +1,6 @@
 <template>
 	<div class="bigContainer">
-		<div class="main">{{ content }} asd</div>
+		<div class="main">{{ content }}</div>
 	</div>
 </template>
 

@@ -27,6 +27,8 @@ import Lesson3_1 from "../components/Lesson3/Chapter1.vue";
 import Lesson3_2 from "../components/Lesson3/Final.vue";
 
 import Confirmation from "../views/Confirmation.vue";
+import Exercise from "../views/Exercise.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -58,6 +60,11 @@ const routes = [
 	{
 		path: "/:lessonName/:chapterName/:chapterNumber/confirmation",
 		component: Confirmation,
+	},
+
+	{
+		path: "/:lessonName/:chapterName/:chapterNumber/exercise",
+		component: Exercise,
 	},
 
 	{ path: "*", component: NotFound },

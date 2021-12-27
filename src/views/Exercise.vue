@@ -1,0 +1,353 @@
+<template>
+	<div class="bigContainer">
+		<div class="loading" v-if="loading">
+			<v-progress-circular
+				:width="10"
+				:size="100"
+				color="green"
+				indeterminate
+			></v-progress-circular>
+		</div>
+
+		<div class="err" v-if="error">
+			<h2>An error has occured</h2>
+			<v-btn x-large @click="reload">Reload</v-btn>
+		</div>
+
+		<div class="fetched" v-if="fetched">
+			<div class="imageCon"><img src="../assets/Picture1.png" alt="" /></div>
+
+			<div class="main">
+				<div class="content">
+					<h1 class="lessonHeader">
+						<span v-if="getChapterName == 'Final Test'">{{
+							lessonName.replaceAll("_", " ")
+						}}</span>
+						{{ getChapterName }}
+						<span v-if="getChapterName != 'Final Test'">Exercise</span>
+					</h1>
+					<div class="list">
+						<div
+							class="indicator"
+							:class="
+								question.answered
+									? question.is_correct
+										? question.question_number == number
+											? 'success act'
+											: 'success'
+										: question.question_number == number
+										? 'error act'
+										: 'error'
+									: question.question_number == number
+									? 'act'
+									: ''
+							"
+							v-for="(question, value) in this.exercises.questions"
+							:key="value"
+						></div>
+					</div>
+
+					<div class="problems">
+						<div
+							class="problem"
+							v-for="(question, value) in this.exercises.questions"
+							:key="value"
+						>
+							<div v-if="question.question_number == number">
+								<div class="question">
+									<p>
+										{{ question.question }}
+									</p>
+								</div>
+								<div class="feedback" v-if="question.answered">
+									<v-btn text v-if="question.is_correct" class="success" x-small
+										>Your answer is correct</v-btn
+									>
+									<v-btn text v-if="!question.is_correct" class="error" x-small
+										>Your answer is incorrect</v-btn
+									>
+								</div>
+
+								<div class="choices">
+									<div
+										class="btn"
+										v-for="(choice, value) in question.choices"
+										:key="value"
+									>
+										<v-btn
+											width="220"
+											x-large
+											:class="
+												question.answered
+													? choice.correct_answer
+														? 'success'
+														: 'error'
+													: ''
+											"
+											@click="answer(question, choice.correct_answer)"
+										>
+											<span v-html="choice.choice"></span>
+										</v-btn>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="btns">
+						<div class="btn">
+							<v-btn @click="navigate('down')" :disabled="number == 1"
+								>Previous</v-btn
+							>
+						</div>
+
+						<div class="btn">
+							<v-btn
+								class="success"
+								@click="navigate('up')"
+								:disabled="number == 10 || !answered"
+								v-if="number != 10"
+								>Next</v-btn
+							>
+							<v-btn
+								class="success"
+								@click="navigate('up')"
+								:disabled="!answered"
+								v-if="number == 10"
+								>View Results</v-btn
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+	import lessonAPI from "../api/lessonAPI";
+	import contentAPI from "../api/contentAPI";
+	export default {
+		data: () => ({
+			lessons: {},
+			fetched: true,
+			loading: false,
+			error: false,
+			lessonName: "",
+			chapterName: "",
+			chapterNumber: "",
+			answered: false,
+			clicked3: false,
+			clicked2: false,
+			clicked1: false,
+			correct: false,
+			number: 1,
+
+			exercises: [],
+		}),
+		methods: {
+			async reload() {
+				try {
+					const lessons = await lessonAPI.prototype.getAllLessons();
+					this.lessons = lessons.data.lessons;
+					this.loading = false;
+					this.fetched = true;
+					console.log(this.lessons);
+				} catch (error) {
+					this.error = true;
+				}
+			},
+
+			answer(question, is_correct) {
+				if (!question.answered) {
+					question.answered = true;
+					question.is_correct = is_correct;
+					this.answered = true;
+				}
+			},
+
+			navigate(direction) {
+				for (let i = 0; i < this.exercises.questions.length; i++) {
+					if (i + 1 == this.number) {
+						if (direction == "up" && this.number != 10) {
+							this.number += 1;
+						}
+						if (direction == "down" && this.number != 1) {
+							this.number -= 1;
+						}
+						this.answered = this.exercises.questions[this.number - 1].answered;
+						return this.number;
+					}
+				}
+			},
+		},
+
+		mounted() {
+			try {
+				console.log(this.lessonName);
+				this.exercises = contentAPI.prototype.getChapterTest(
+					this.lessonName.replaceAll("_", " "),
+					this.chapterNumber
+				);
+				console.log(this.exercises);
+			} catch (error) {
+				this.error = true;
+			}
+		},
+
+		// async created() {
+		// 	if (!localStorage.getItem("token")) {
+		// 		this.$router.push("/signin");
+		// 	} else {
+		// 		try {
+		// 			const lessons = await lessonAPI.prototype.getAllLessons();
+		// 			this.lessons = lessons.data.lessons;
+		// 			this.loading = false;
+		// 			this.fetched = true;
+		// 			console.log(this.lessons);
+		// 		} catch (error) {
+		// 			this.error = true;
+		// 		}
+		// 	}
+		// },
+
+		computed: {
+			getChapterName: function() {
+				this.lessonName = this.$route.params.lessonName;
+				this.chapterName = this.$route.params.chapterName;
+				this.chapterNumber = this.$route.params.chapterNumber;
+				console.log("yow");
+				return this.chapterName;
+			},
+
+			getQuestions: function() {
+				try {
+					this.exercises = contentAPI.prototype.getChapterTest(
+						this.$route.params.lessonName,
+						this.$route.params.chapterNumber
+					);
+					console.log(this.exercises);
+				} catch (error) {
+					this.error = true;
+				}
+			},
+		},
+	};
+</script>
+
+<style scoped>
+	.bigContainer {
+		height: 100%;
+		width: 100%;
+		background-color: #f7f7f7;
+	}
+
+	.imageCon {
+		margin: auto;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 10px;
+	}
+
+	img {
+		width: 150px;
+	}
+
+	.main {
+		width: 85%;
+		background-color: white;
+		margin: 0px auto;
+		border-radius: 20px;
+		min-height: 650px;
+		box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+			0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+		padding: 10px 80px;
+	}
+
+	.content {
+		padding: 20px;
+		margin: 20px auto;
+		margin-top: 40px;
+		/* border: 1px solid black; */
+	}
+
+	.content p {
+		font-weight: bold;
+		font-size: 22px;
+	}
+
+	.question {
+		padding: 10px 40px;
+	}
+
+	.choices {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.btns {
+		display: flex;
+		margin: 20px auto;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.btn {
+		margin: 20px;
+	}
+
+	.list {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 90%;
+		margin: 40px auto;
+	}
+
+	.indicator {
+		min-width: 100px;
+		min-height: 7px;
+		background-color: grey;
+		margin: 5px;
+		border-radius: 10px;
+	}
+
+	.lessonHeader {
+		margin: 20px 0px;
+	}
+
+	.feedback {
+		padding: 10px;
+		text-align: center;
+	}
+
+	.v-btn:not(.v-btn--round).v-size--x-large {
+		padding: 10px;
+		margin: 0px 0px;
+	}
+
+	.loading {
+		height: 90%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.err {
+		height: 90%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.err h2 {
+		padding: 20px;
+	}
+
+	.act {
+		outline: 5px solid black;
+	}
+</style>

@@ -39,7 +39,7 @@
 						>
 					</div>
 					<div class="btn">
-						<v-btn rounded class="success" to="">Take Exercise</v-btn>
+						<v-btn rounded class="success" to="exercise/">Take Exercise</v-btn>
 					</div>
 				</div>
 			</div>

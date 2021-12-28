@@ -28,7 +28,7 @@ import Lesson3_2 from "../components/Lesson3/Final.vue";
 
 import Confirmation from "../views/Confirmation.vue";
 import Exercise from "../views/Exercise.vue";
-
+import Result from "../views/Result.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -65,6 +65,11 @@ const routes = [
 	{
 		path: "/:lessonName/:chapterName/:chapterNumber/exercise",
 		component: Exercise,
+	},
+
+	{
+		path: "/:lessonName/:chapterName/:chapterNumber/exercise/result",
+		component: Result,
 	},
 
 	{ path: "*", component: NotFound },

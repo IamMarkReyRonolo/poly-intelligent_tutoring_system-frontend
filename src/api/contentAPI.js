@@ -259,10 +259,7 @@ export default class Content {
 		const contents = [lesson1_1, lesson1_2];
 		let result;
 		contents.forEach((content) => {
-			if (
-				content.lesson_name == lesson_name &&
-				content.chapter_number == chapter_number
-			) {
+			if (content.lesson_name == lesson_name && content.chapter_number == 1) {
 				result = content;
 			}
 		});

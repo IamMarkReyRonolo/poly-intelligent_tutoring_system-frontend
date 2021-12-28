@@ -21,8 +21,8 @@ export default class API {
 		return user;
 	}
 
-	async updateUser(userId, updatedUser) {
-		const user = await axios.patch(url + "/" + userId, updatedUser);
+	async updateUser(updatedUser) {
+		const user = await axios.patch(url + "/update", updatedUser);
 		return user;
 	}
 }

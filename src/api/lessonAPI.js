@@ -11,18 +11,16 @@ export default class API {
 		return lessons;
 	}
 
-	async signInUser(credentials) {
-		const user = await axios.post(url + "/signin", credentials);
-		return user;
+	async updateChapter(lessonid, chapnum, updatedChapter) {
+		const chapter = await axios.patch(
+			url + "/" + lessonid + "/" + chapnum,
+			updatedChapter
+		);
+		return chapter;
 	}
 
-	async createUser(newUser) {
-		const user = await axios.post(url + "/create", newUser);
-		return user;
-	}
-
-	async updateUser(userId, updatedUser) {
-		const user = await axios.patch(url + "/" + userId, updatedUser);
-		return user;
+	async updateLesson(lessonid, updatedLesson) {
+		const chapter = await axios.patch(url + "/" + lessonid, updatedLesson);
+		return chapter;
 	}
 }

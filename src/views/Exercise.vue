@@ -111,9 +111,9 @@
 							>
 							<v-btn
 								class="success"
-								@click="navigate('up')"
 								:disabled="!answered"
 								v-if="number == 10"
+								@click="viewResult"
 								>View Results</v-btn
 							>
 						</div>
@@ -121,17 +121,31 @@
 				</div>
 			</div>
 		</div>
+
+		<v-dialog hide-overlay persistent width="300" v-model="loadingDialog">
+			<v-card color="white" light>
+				<v-card-text>
+					<h3 class="dialogText">Saving Progress</h3>
+					<v-progress-linear
+						indeterminate
+						color="black"
+						class="mb-0 mt-5"
+					></v-progress-linear>
+				</v-card-text>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
 <script>
 	import lessonAPI from "../api/lessonAPI";
 	import contentAPI from "../api/contentAPI";
+	import userAPI from "../api/userAPI";
 	export default {
 		data: () => ({
 			lessons: {},
-			fetched: true,
-			loading: false,
+			fetched: false,
+			loading: true,
 			error: false,
 			lessonName: "",
 			chapterName: "",
@@ -144,17 +158,133 @@
 			number: 1,
 
 			exercises: [],
+			points: 0,
+			exercise_status: "",
+			lesson: {},
+			chapter: {},
+			newChapterNumber: 0,
+			loadingDialog: false,
+			nextLesson: {},
 		}),
 		methods: {
+			async viewResult() {
+				try {
+					this.loadingDialog = true;
+					this.exercises.questions.forEach((question) => {
+						if (question.is_correct) {
+							this.points += 1;
+						}
+					});
+
+					this.exercise_status = this.points > 7 ? "Passed" : "Failed";
+					const tutorial_status =
+						this.exercise_status == "Passed" ? "Completed" : "Redo";
+					console.log(this.points);
+					console.log(this.exercise_status);
+
+					const updated = await lessonAPI.prototype.updateChapter(
+						this.lesson._id,
+						this.chapter.chapter_number,
+						{
+							tutorial_status: tutorial_status,
+							exercise_status: this.exercise_status,
+							exercise_score: this.points,
+						}
+					);
+					console.log(updated);
+
+					const userUpdated = await userAPI.prototype.updateUser({
+						checkpoint: {
+							lessonid: this.lesson._id,
+							chapter_number: this.chapter.chapter_number,
+						},
+					});
+
+					if (this.exercise_status == "Passed") {
+						console.log();
+
+						if (this.chapter.chapter_number + 1 < this.lesson.chapter.length) {
+							this.newChapterNumber = this.chapter.chapter_number + 1;
+							console.log("new");
+							console.log(this.newChapterNumber);
+
+							const chapterUpdated = await lessonAPI.prototype.updateChapter(
+								this.lesson._id,
+								this.newChapterNumber,
+								{
+									tutorial_status: "Not Yet",
+									exercise_status: "Not Yet",
+									exercise_score: 0,
+								}
+							);
+							console.log(chapterUpdated);
+						} else {
+							let flag = false;
+							for (let i = 0; i < this.lessons.length; i++) {
+								if (this.lesson._id == this.lessons[i]._id) {
+									if (i + 1 != this.lessons.length) {
+										this.nextLesson = this.lessons[i + 1];
+										flag = true;
+									}
+								}
+							}
+							console.log("nextLesson");
+							console.log(this.nextLesson);
+							this.newChapterNumber = 1;
+							const lessonUpdated2 = await lessonAPI.prototype.updateLesson(
+								this.lesson._id,
+								{
+									status: "Completed",
+								}
+							);
+
+							console.log(flag);
+							if (flag == true) {
+								const lessonUpdated1 = await lessonAPI.prototype.updateLesson(
+									this.nextLesson._id,
+									{
+										status: "In Progress",
+									}
+								);
+
+								const chapp = await lessonAPI.prototype.updateChapter(
+									this.nextLesson._id,
+									1,
+									{
+										tutorial_status: "Not Yet",
+										exercise_status: "Not Yet",
+										exercise_score: 0,
+									}
+								);
+								console.log("flag");
+								console.log(lessonUpdated1);
+								console.log(chapp);
+							}
+						}
+					}
+
+					this.loadingDialog = false;
+
+					console.log(userUpdated);
+
+					this.$router.push("result");
+				} catch (error) {
+					console.log(error);
+					this.error = error;
+				}
+			},
+
 			async reload() {
 				try {
-					const lessons = await lessonAPI.prototype.getAllLessons();
-					this.lessons = lessons.data.lessons;
-					this.loading = false;
-					this.fetched = true;
-					console.log(this.lessons);
+					console.log(this.lessonName);
+					this.exercises = contentAPI.prototype.getChapterTest(
+						this.lessonName.replaceAll("_", " "),
+						this.chapterNumber
+					);
+					console.log(this.exercises);
 				} catch (error) {
 					this.error = true;
+					console.log(error);
 				}
 			},
 
@@ -182,54 +312,57 @@
 			},
 		},
 
-		mounted() {
-			try {
-				console.log(this.lessonName);
-				this.exercises = contentAPI.prototype.getChapterTest(
-					this.lessonName.replaceAll("_", " "),
-					this.chapterNumber
-				);
-				console.log(this.exercises);
-			} catch (error) {
-				this.error = true;
+		async created() {
+			if (!localStorage.getItem("token")) {
+				this.$router.push("/signin");
+			} else {
+				console.log("what's up");
+				try {
+					console.log("comeee");
+					this.loading = true;
+					const lessons = await lessonAPI.prototype.getAllLessons();
+					console.log("off");
+					console.log(this.$route.params.lessonName.replaceAll("_", " "));
+					console.log(this.$route.params.chapterName);
+					lessons.data.lessons.forEach((element) => {
+						if (
+							element.name == this.$route.params.lessonName.replaceAll("_", " ")
+						) {
+							this.lesson = element;
+							element.chapter.forEach((chap) => {
+								if (chap.chapter_name == this.$route.params.chapterName) {
+									this.chapter = chap;
+								}
+							});
+						}
+					});
+					console.log("on");
+					this.lessons = lessons.data.lessons;
+					console.log("howww");
+					console.log(this.lessons);
+					console.log("eyyy");
+					console.log(this.lesson);
+					console.log("oww");
+					console.log(this.chapter);
+
+					this.exercises = contentAPI.prototype.getChapterTest(
+						this.$route.params.lessonName.replaceAll("_", " "),
+						this.$route.params.chapterNumber
+					);
+					this.loading = false;
+					this.fetched = true;
+				} catch (error) {
+					this.error = true;
+				}
 			}
 		},
-
-		// async created() {
-		// 	if (!localStorage.getItem("token")) {
-		// 		this.$router.push("/signin");
-		// 	} else {
-		// 		try {
-		// 			const lessons = await lessonAPI.prototype.getAllLessons();
-		// 			this.lessons = lessons.data.lessons;
-		// 			this.loading = false;
-		// 			this.fetched = true;
-		// 			console.log(this.lessons);
-		// 		} catch (error) {
-		// 			this.error = true;
-		// 		}
-		// 	}
-		// },
 
 		computed: {
 			getChapterName: function() {
 				this.lessonName = this.$route.params.lessonName;
 				this.chapterName = this.$route.params.chapterName;
 				this.chapterNumber = this.$route.params.chapterNumber;
-				console.log("yow");
 				return this.chapterName;
-			},
-
-			getQuestions: function() {
-				try {
-					this.exercises = contentAPI.prototype.getChapterTest(
-						this.$route.params.lessonName,
-						this.$route.params.chapterNumber
-					);
-					console.log(this.exercises);
-				} catch (error) {
-					this.error = true;
-				}
 			},
 		},
 	};
@@ -349,5 +482,9 @@
 
 	.act {
 		outline: 5px solid black;
+	}
+
+	.dialogText {
+		padding-top: 10px;
 	}
 </style>

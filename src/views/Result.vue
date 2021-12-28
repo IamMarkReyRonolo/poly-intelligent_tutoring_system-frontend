@@ -1,6 +1,20 @@
 <template>
 	<div class="bigContainer">
-		<div class="fetched" v-if="true">
+		<div class="loading" v-if="loading">
+			<v-progress-circular
+				:width="10"
+				:size="100"
+				color="green"
+				indeterminate
+			></v-progress-circular>
+		</div>
+
+		<div class="err" v-if="error">
+			<h2>An error has occured</h2>
+			<v-btn x-large @click="reload">Reload</v-btn>
+		</div>
+
+		<div class="fetched" v-if="fetched">
 			<div class="imageCon"><img src="../assets/Picture1.png" alt="" /></div>
 
 			<div class="main">
@@ -12,20 +26,42 @@
 						{{ getChapterName }}
 						<span v-if="getChapterName != 'Final Test'">Exercise</span>
 					</h1>
-					<p>
-						In this section your knowledge of the topic will be put to test.
+					<h2>
+						Your Score
+					</h2>
+					<h1
+						:class="
+							this.chapter.exercise_status == 'Passed' ? 'passed' : 'failed'
+						"
+					>
+						{{ this.chapter.exercise_score }}/10
+					</h1>
+					<p v-if="this.chapter.exercise_status == 'Passed'" class="passed">
+						Congratulations, you passed!
 					</p>
-					<p>Are you ready?</p>
+					<p v-if="this.chapter.exercise_status != 'Passed'" class="failed">
+						Try again, you failed!
+					</p>
+					<div class="btn">
+						<v-btn rounded class="white" to="/dashboard">Go to Dashboard</v-btn>
+					</div>
 					<div class="btn">
 						<v-btn
 							rounded
-							class="white"
+							class="success"
 							:to="'/' + lessonName + '/' + chapterNumber"
-							>Go back to tutorial</v-btn
+							v-if="this.chapter.exercise_status == 'Passed'"
+							>Proceed</v-btn
 						>
 					</div>
 					<div class="btn">
-						<v-btn rounded class="success" to="exercise/">Take Exercise</v-btn>
+						<v-btn
+							rounded
+							class="warning"
+							:to="'/' + lessonName + '/' + chapterNumber"
+							v-if="this.chapter.exercise_status != 'Passed'"
+							>Redo Tutorial</v-btn
+						>
 					</div>
 				</div>
 			</div>
@@ -34,21 +70,61 @@
 </template>
 
 <script>
+	import lessonAPI from "../api/lessonAPI";
+
 	export default {
 		data: () => ({
-			lessons: {},
 			fetched: false,
 			loading: true,
 			error: false,
 			lessonName: "",
 			chapterName: "",
 			chapterNumber: "",
+			lesson: {},
+			chapter: {},
 		}),
-		methods: {},
+		methods: {
+			async reload() {
+				try {
+					const lessons = await lessonAPI.prototype.getAllLessons();
+					this.lessons = lessons.data.lessons;
+					this.loading = false;
+					this.fetched = true;
+					console.log(this.lessons);
+				} catch (error) {
+					this.error = true;
+				}
+			},
+		},
 
-		async created() {
+		async mounted() {
 			if (!localStorage.getItem("token")) {
 				this.$router.push("/signin");
+			} else {
+				try {
+					console.log(this.chapterName);
+					console.log(this.lessonName);
+					const lessons = await lessonAPI.prototype.getAllLessons();
+
+					lessons.data.lessons.forEach((element) => {
+						if (
+							element.name == this.$route.params.lessonName.replaceAll("_", " ")
+						) {
+							this.lesson = element;
+							element.chapter.forEach((chap) => {
+								if (chap.chapter_name == this.$route.params.chapterName) {
+									this.chapter = chap;
+								}
+							});
+						}
+					});
+					console.log(this.lesson);
+					console.log(this.chapter);
+					this.loading = false;
+					this.fetched = true;
+				} catch (error) {
+					this.error = true;
+				}
 			}
 		},
 
@@ -120,6 +196,14 @@
 	.v-btn:not(.v-btn--round).v-size--x-large {
 		padding: 10px;
 		margin: 0px 0px;
+	}
+
+	.passed {
+		color: #74d76b;
+	}
+
+	.failed {
+		color: red;
 	}
 
 	.loading {

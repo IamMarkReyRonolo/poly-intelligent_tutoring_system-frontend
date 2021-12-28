@@ -57,6 +57,7 @@
 							</v-progress-linear>
 						</div>
 						{{ getCheckpoint }}
+						{{ getChapterName }}
 						<div class="continueBtn">
 							<v-btn text color="black" x-small v-if="checkpoint" to="/lessons">
 								Continue where you left of →</v-btn
@@ -86,16 +87,16 @@
 
 							<div class="content">
 								<h3>Score</h3>
-								<h2 :class="chapter.score < 8 ? 'err' : 'suc'">
-									{{ chapter.score }}/10
+								<h2 :class="chapter.exercise_score < 8 ? 'er' : 'suc'">
+									{{ chapter.exercise_score }}/10
 								</h2>
-								<p v-if="chapter.score < 8">
+								<p v-if="chapter.exercise_score < 8">
 									You did not pass. You need to go back and learn
 									{{ chapter.chapter_name }} in lesson
 									{{ checkpoint.lesson_number }}: "{{ checkpoint.name }}".
 								</p>
 
-								<p v-if="chapter.score > 7">
+								<p v-if="chapter.exercise_score > 7">
 									Congratulations you passed. You can now proceed to the next
 									tutorial.
 								</p>
@@ -134,16 +135,6 @@
 				this.$router.push("/");
 			},
 
-			getChapterName() {
-				this.lessons.forEach((element, index, array) => {
-					element.chapter.forEach((el) => {
-						if (el.chapter_number == this.user.checkpoint.chapter_number) {
-							this.chapter = el;
-							this.chapter.score = 7;
-						}
-					});
-				});
-			},
 			async reload() {
 				try {
 					const data = await userAPI.prototype.getSpecificUser();
@@ -171,6 +162,7 @@
 					this.lessons = lessons.data.lessons;
 					this.loading = false;
 					this.fetched = true;
+					console.log(this.user);
 					console.log(this.lessons);
 				} catch (error) {
 					this.error = true;
@@ -195,18 +187,32 @@
 			},
 
 			getCheckpoint: function() {
-				if (this.user.checkpoint) {
+				if (this.user.checkpoint.lessonid) {
 					this.lessons.forEach((element, index, array) => {
-						if (
-							element.name ==
-							this.user.checkpoint.lesson_name.replaceAll("_", " ")
-						) {
+						if (element._id == this.user.checkpoint.lessonid) {
+							console.log("checkpoint");
 							console.log(element);
 							this.checkpoint = element;
 						}
 					});
 				} else {
 					this.checkpoint = null;
+				}
+			},
+
+			getChapterName: function() {
+				console.log("woooooooooooooo");
+				console.log(this.checkpoint);
+				if (this.user.checkpoint.lessonid) {
+					for (let i = 0; i < this.checkpoint.chapter.length; i++) {
+						if (
+							this.checkpoint.chapter[i].chapter_number ==
+							this.user.checkpoint.chapter_number
+						) {
+							this.chapter = this.checkpoint.chapter[i];
+							console.log(this.chapter);
+						}
+					}
 				}
 			},
 		},
@@ -302,7 +308,7 @@
 		padding-right: 0px;
 	}
 
-	.err {
+	.er {
 		color: #e31f1f;
 	}
 

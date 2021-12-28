@@ -59,7 +59,13 @@
 						{{ getCheckpoint }}
 						{{ getChapterName }}
 						<div class="continueBtn">
-							<v-btn text color="black" x-small v-if="checkpoint" to="/lessons">
+							<v-btn
+								text
+								color="black"
+								x-small
+								v-if="checkpoint && overAllProgress != 100"
+								:to="resumeProgress + '/chapters'"
+							>
 								Continue where you left of →</v-btn
 							>
 						</div>
@@ -82,7 +88,23 @@
 						<p class="dateTitle">Date</p>
 						<div class="inner">
 							<div>
-								<v-avatar color="grey" size="150" class="quizAvatar"></v-avatar>
+								<v-avatar color="grey" size="150" class="quizAvatar">
+									<img
+										v-if="this.checkpoint.name == 'Intro To Polynomials'"
+										src="../assets/icon1.jpg"
+										alt=""
+									/>
+									<img
+										v-if="this.checkpoint.name == 'Polynomial Operations'"
+										src="../assets/icon2.jpg"
+										alt=""
+									/>
+									<img
+										v-if="this.checkpoint.name == 'Solving Linear Polynomials'"
+										src="../assets/icon3.jpg"
+										alt=""
+									/>
+								</v-avatar>
 							</div>
 
 							<div class="content">
@@ -92,16 +114,30 @@
 								</h2>
 								<p v-if="chapter.exercise_score < 8">
 									You did not pass. You need to go back and learn
-									{{ chapter.chapter_name }} in lesson
-									{{ checkpoint.lesson_number }}: "{{ checkpoint.name }}".
+									<b
+										>{{ chapter.chapter_name }} in lesson
+										{{ checkpoint.lesson_number }}: "{{ checkpoint.name }}"</b
+									>
+									.
 								</p>
 
 								<p v-if="chapter.exercise_score > 7">
-									Congratulations you passed. You can now proceed to the next
-									tutorial.
+									Congratulations you passed
+									<b>
+										lesson
+										{{ checkpoint.lesson_number }}: "{{ checkpoint.name }}, -
+										{{ chapter.chapter_name }}."</b
+									>
+									You can now proceed to the next tutorial.
 								</p>
 								<div class="continueBtn">
-									<v-btn text color="black" x-small to="/lessons">
+									<v-btn
+										text
+										color="black"
+										x-small
+										:to="resumeProgress + '/chapters'"
+										v-if="overAllProgress != 100"
+									>
 										Learn Now →</v-btn
 									>
 								</div>
@@ -131,8 +167,14 @@
 		}),
 		methods: {
 			logOut() {
-				localStorage.removeItem("token");
-				this.$router.push("/");
+				this.fetched = false;
+				this.loading = true;
+				setTimeout(() => {
+					localStorage.removeItem("token");
+					this.$router.push("/");
+					this.fetched = true;
+					this.loading = false;
+				}, 2000);
 			},
 
 			async reload() {
@@ -182,7 +224,8 @@
 						}
 					});
 				});
-
+				console.log("progress");
+				console.log((this.progress / 110) * 100);
 				return (this.progress / 110) * 100;
 			},
 
@@ -197,6 +240,16 @@
 					});
 				} else {
 					this.checkpoint = null;
+				}
+				console.log("checkk");
+				console.log(this.checkpoint);
+			},
+			resumeProgress: function() {
+				for (let i = 0; i < this.lessons.length; i++) {
+					if (this.lessons[i].status == "In Progress") {
+						console.log(this.lessons[i].name);
+						return this.lessons[i].name.replaceAll(" ", "_");
+					}
 				}
 			},
 

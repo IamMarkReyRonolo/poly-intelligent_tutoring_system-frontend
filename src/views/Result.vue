@@ -49,9 +49,9 @@
 						<v-btn
 							rounded
 							class="success"
-							:to="'/' + lessonName + '/' + chapterNumber"
+							:to="'/' + lessonName + '/chapters'"
 							v-if="this.chapter.exercise_status == 'Passed'"
-							>Proceed</v-btn
+							>Back to Lesson Chapters</v-btn
 						>
 					</div>
 					<div class="btn">

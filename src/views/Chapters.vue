@@ -30,8 +30,16 @@
 				<div class="header">
 					<h1 class="lessonHeader">{{ this.lesson.name }}</h1>
 					<div class="lessonProgress">
-						<v-btn color="success" rounded>
+						<v-btn
+							color="success"
+							rounded
+							:to="`${getChapterResume}`"
+							v-if="getChapterResume"
+						>
 							Resume
+						</v-btn>
+						<v-btn color="success" rounded v-if="!getChapterResume">
+							Completed
 						</v-btn>
 
 						<v-progress-linear
@@ -173,6 +181,16 @@
 				console.log(this.progress);
 				console.log(this.lesson.chapter.length * 10);
 				return (this.progress / (this.lesson.chapter.length * 10)) * 100;
+			},
+
+			getChapterResume: function() {
+				for (let i = 0; i < this.lesson.chapter.length; i++) {
+					if (this.lesson.chapter[i].tutorial_status == "Not Yet") {
+						return this.lesson.chapter[i].chapter_number;
+					}
+				}
+
+				return null;
 			},
 		},
 	};

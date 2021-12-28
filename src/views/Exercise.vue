@@ -200,10 +200,15 @@
 						},
 					});
 
-					if (this.exercise_status == "Passed") {
-						console.log();
+					console.log("KASULOOOD");
+					console.log(this.chapter.chapter_number);
+					console.log(this.chapter.chapter_number + 1);
+					console.log(this.lesson.chapter.length);
+					console.log("SUPPPPP");
 
-						if (this.chapter.chapter_number + 1 < this.lesson.chapter.length) {
+					if (this.exercise_status == "Passed") {
+						console.log("hello");
+						if (this.chapter.chapter_number + 1 <= this.lesson.chapter.length) {
 							this.newChapterNumber = this.chapter.chapter_number + 1;
 							console.log("new");
 							console.log(this.newChapterNumber);

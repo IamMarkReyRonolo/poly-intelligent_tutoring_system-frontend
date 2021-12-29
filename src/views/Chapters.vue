@@ -185,7 +185,10 @@
 
 			getChapterResume: function() {
 				for (let i = 0; i < this.lesson.chapter.length; i++) {
-					if (this.lesson.chapter[i].tutorial_status == "Not Yet") {
+					if (
+						this.lesson.chapter[i].exercise_status == "Not Yet" ||
+						this.lesson.chapter[i].exercise_status == "Failed"
+					) {
 						return this.lesson.chapter[i].chapter_number;
 					}
 				}

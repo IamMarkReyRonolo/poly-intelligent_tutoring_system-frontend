@@ -15,8 +15,8 @@
 		</div>
 
 		<div class="fetched" v-if="fetched">
+			{{ trigger }}
 			<div class="imageCon"><img src="../assets/Picture1.png" alt="" /></div>
-
 			<div class="main">
 				<div class="profile">
 					<h2 class="profileTitle">Profile</h2>
@@ -71,7 +71,10 @@
 						</div>
 					</div>
 
-					<div class="recentActivity" v-if="!checkpoint">
+					<div
+						class="recentActivity"
+						v-if="!checkpoint && overallProgress != 100"
+					>
 						<h3>Recent Activity</h3>
 						<div class="emptyContent">
 							<img src="../assets/empty.png" alt="" class="emptyImg" />
@@ -83,7 +86,10 @@
 							</div>
 						</div>
 					</div>
-					<div class="recentActivity" v-if="checkpoint">
+					<div
+						class="recentActivity"
+						v-if="checkpoint && overallProgress != 100"
+					>
 						<h3>Recent Activity</h3>
 						<p class="dateTitle">
 							<b>
@@ -178,8 +184,121 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="congratulations" v-if="overallProgress == 100">
+						<div class="congTitle">
+							<h1>Congratulations</h1>
+							<span>🎉🎉</span>
+						</div>
+
+						<div class="congContent">
+							<v-avatar color="green" size="100" class="badge"
+								><img
+									v-if="this.user.gender == 'Male'"
+									src="../assets/badge.png"
+									alt=""
+								/>
+							</v-avatar>
+
+							<p>
+								You have received the badge of completion.
+							</p>
+
+							<p>
+								You have successfully finished all the lessons. By now you
+								should be confident about the basics of polynomials.
+							</p>
+
+							<p class="dateCompleted">
+								<b>
+									Date Completed:
+									{{
+										new Date(Date.parse(this.checkpoint.updatedAt))
+											.toString()
+											.split(" ")[0]
+									}},
+									{{
+										new Date(Date.parse(this.checkpoint.updatedAt))
+											.toString()
+											.split(" ")[1]
+									}}
+									{{
+										new Date(Date.parse(this.checkpoint.updatedAt))
+											.toString()
+											.split(" ")[2]
+									}}
+									{{
+										new Date(Date.parse(this.checkpoint.updatedAt))
+											.toString()
+											.split(" ")[3]
+									}}
+									-
+									{{
+										new Date(
+											Date.parse(this.checkpoint.updatedAt)
+										).toLocaleString("en-US", {
+											hour: "numeric",
+											minute: "numeric",
+											hour12: true,
+										})
+									}}
+								</b>
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
+
+			<br />
+			<br />
+			<v-row justify="center">
+				<v-btn class="green" dark @click.stop="dialog = true" small>
+					Message from the developers
+				</v-btn>
+
+				<v-dialog v-model="dialog" max-width="650">
+					<v-card>
+						<div class="welcomeMessage">
+							<h1>Welcome</h1>
+
+							<br />
+							<div class="welcomeHeader">
+								<h2>Hi {{ this.user.name.firstName }}</h2>
+								<span>👋</span>
+							</div>
+
+							<br />
+							<p>
+								We are so glad that you decided to try out Poly. We hope you can
+								learn all things about basic Polynomials here and experience the
+								best tutorial service.
+							</p>
+
+							<br />
+							<h3><i>From the team</i></h3>
+							<div class="team">
+								<v-avatar color="grey" size="50"
+									><img src="../assets/picc1.jpg" alt="" />
+								</v-avatar>
+								<v-avatar color="grey" size="50"
+									><img src="../assets/picc2.jpg" alt="" />
+								</v-avatar>
+								<v-avatar color="grey" size="50"
+									><img src="../assets/picc3.jpg" alt="" />
+								</v-avatar>
+							</div>
+
+							<v-card-actions>
+								<v-spacer></v-spacer>
+								<v-btn color="green darken-1" text @click="dialog = false">
+									Close
+								</v-btn>
+								<v-spacer></v-spacer>
+							</v-card-actions>
+						</div>
+					</v-card>
+				</v-dialog>
+			</v-row>
 		</div>
 	</div>
 </template>
@@ -199,6 +318,7 @@
 			fetched: false,
 			loading: true,
 			error: false,
+			dialog: false,
 		}),
 		methods: {
 			logOut() {
@@ -303,6 +423,13 @@
 							console.log(this.checkpoint);
 						}
 					}
+				}
+			},
+
+			trigger: function() {
+				if (localStorage.getItem("new") != "false") {
+					localStorage.setItem("new", false);
+					this.dialog = true;
 				}
 			},
 		},
@@ -436,5 +563,68 @@
 
 	.err h2 {
 		padding: 20px;
+	}
+
+	.welcomeMessage {
+		padding: 50px;
+		text-align: center;
+	}
+
+	.welcomeMessage h1,
+	.welcomeMessage h2 {
+		color: green;
+	}
+
+	.welcomeMessage h1 {
+		font-size: 50px;
+	}
+
+	.welcomeMessage h2 {
+		font-size: 35px;
+	}
+
+	.welcomeMessage p {
+		font-size: 20px;
+	}
+
+	.welcomeHeader {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.welcomeHeader span {
+		font-size: 30px;
+	}
+
+	.congTitle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.congTitle span {
+		font-size: 30px;
+	}
+
+	.congratulations h1 {
+		color: green;
+	}
+
+	.congContent {
+		text-align: center;
+	}
+
+	.badge {
+		margin: 10px;
+	}
+
+	.congContent p {
+		font-weight: bold;
+	}
+
+	.dateCompleted {
+		font-weight: normal;
+		color: green;
 	}
 </style>

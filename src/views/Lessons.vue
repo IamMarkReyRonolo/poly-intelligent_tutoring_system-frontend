@@ -45,7 +45,9 @@
 								</p>
 							</div>
 						</div>
-						<h3 class="status">{{ this.lessons[0].status }}</h3>
+						<h3 class="status" :class="this.lessons[0].status">
+							{{ this.lessons[0].status }}
+						</h3>
 					</div>
 
 					<div class="lesson">
@@ -67,7 +69,9 @@
 								</p>
 							</div>
 						</div>
-						<h3 class="status">{{ this.lessons[1].status }}</h3>
+						<h3 class="status" :class="this.lessons[1].status">
+							{{ this.lessons[1].status }}
+						</h3>
 					</div>
 
 					<div class="lesson">
@@ -89,7 +93,9 @@
 								</p>
 							</div>
 						</div>
-						<h3 class="status">{{ this.lessons[2].status }}</h3>
+						<h3 class="status" :class="this.lessons[2].status">
+							{{ this.lessons[2].status }}
+						</h3>
 					</div>
 				</div>
 			</div>
@@ -239,5 +245,13 @@
 
 	.err h2 {
 		padding: 20px;
+	}
+
+	.In {
+		color: orange;
+	}
+
+	.Completed {
+		color: green;
 	}
 </style>

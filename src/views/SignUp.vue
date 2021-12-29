@@ -122,6 +122,7 @@
 					const response = await userAPI.prototype.createUser(registration);
 					this.signUpDialog = false;
 					localStorage.setItem("token", response.data.user.token);
+					localStorage.setItem("new", true);
 					this.$router.push("/dashboard");
 				} catch (error) {
 					this.signUpDialog = false;

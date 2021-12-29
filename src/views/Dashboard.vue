@@ -58,12 +58,12 @@
 						</div>
 						{{ getCheckpoint }}
 						{{ getChapterName }}
-						<div class="continueBtn">
+						<div class="continueBtn" v-if="overallProgress != 100">
 							<v-btn
 								text
 								color="black"
 								x-small
-								v-if="checkpoint && overAllProgress != 100"
+								v-if="checkpoint"
 								:to="resumeProgress + '/chapters'"
 							>
 								Continue where you left of →</v-btn
@@ -85,7 +85,41 @@
 					</div>
 					<div class="recentActivity" v-if="checkpoint">
 						<h3>Recent Activity</h3>
-						<p class="dateTitle">Date</p>
+						<p class="dateTitle">
+							<b>
+								Date:
+								{{
+									new Date(Date.parse(this.checkpoint.updatedAt))
+										.toString()
+										.split(" ")[0]
+								}},
+								{{
+									new Date(Date.parse(this.checkpoint.updatedAt))
+										.toString()
+										.split(" ")[1]
+								}}
+								{{
+									new Date(Date.parse(this.checkpoint.updatedAt))
+										.toString()
+										.split(" ")[2]
+								}}
+								{{
+									new Date(Date.parse(this.checkpoint.updatedAt))
+										.toString()
+										.split(" ")[3]
+								}}
+								-
+								{{
+									new Date(
+										Date.parse(this.checkpoint.updatedAt)
+									).toLocaleString("en-US", {
+										hour: "numeric",
+										minute: "numeric",
+										hour12: true,
+									})
+								}}
+							</b>
+						</p>
 						<div class="inner">
 							<div>
 								<v-avatar color="grey" size="150" class="quizAvatar">
@@ -136,7 +170,7 @@
 										color="black"
 										x-small
 										:to="resumeProgress + '/chapters'"
-										v-if="overAllProgress != 100"
+										v-if="overallProgress != 100"
 									>
 										Learn Now →</v-btn
 									>
@@ -153,6 +187,7 @@
 <script>
 	import userAPI from "../api/userAPI";
 	import lessonAPI from "../api/lessonAPI";
+	import Axios from "axios";
 
 	export default {
 		data: () => ({
@@ -205,6 +240,7 @@
 					this.loading = false;
 					this.fetched = true;
 					console.log(this.user);
+					console.log("wassap");
 					console.log(this.lessons);
 				} catch (error) {
 					this.error = true;
@@ -263,7 +299,8 @@
 							this.user.checkpoint.chapter_number
 						) {
 							this.chapter = this.checkpoint.chapter[i];
-							console.log(this.chapter);
+							console.log("hello");
+							console.log(this.checkpoint);
 						}
 					}
 				}

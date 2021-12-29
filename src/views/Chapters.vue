@@ -34,9 +34,17 @@
 							color="success"
 							rounded
 							:to="`${getChapterResume}`"
-							v-if="getChapterResume"
+							v-if="getChapterResume && overallProgress != 0"
 						>
 							Resume
+						</v-btn>
+						<v-btn
+							color="success"
+							rounded
+							:to="`${getChapterResume}`"
+							v-if="getChapterResume && overallProgress == 0"
+						>
+							Start
 						</v-btn>
 						<v-btn color="success" rounded v-if="!getChapterResume">
 							Completed
@@ -90,11 +98,15 @@
 								</div>
 							</div>
 							<div class="chapterTutorial">
-								<p>{{ chapter.tutorial_status }}</p>
+								<p :class="chapter.tutorial_status">
+									{{ chapter.tutorial_status }}
+								</p>
 							</div>
 
 							<div class="chapterExercise">
-								<p>{{ chapter.exercise_status }}</p>
+								<p :class="chapter.exercise_status">
+									{{ chapter.exercise_status }}
+								</p>
 							</div>
 						</v-list-item>
 					</v-list>
@@ -339,5 +351,19 @@
 
 	.err h2 {
 		padding: 20px;
+	}
+
+	.Completed,
+	.Passed {
+		color: green;
+	}
+
+	.Redo,
+	.Not {
+		color: orange;
+	}
+
+	.Failed {
+		color: red;
 	}
 </style>

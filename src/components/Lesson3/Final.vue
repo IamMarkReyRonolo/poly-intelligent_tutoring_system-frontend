@@ -1,6 +1,6 @@
 <template>
 	<div class="bigContainer">
-		<div class="loading" v-if="false">
+		<div class="loading" v-if="loading">
 			<v-progress-circular
 				:width="10"
 				:size="100"
@@ -14,7 +14,7 @@
 			<v-btn x-large @click="reload">Reload</v-btn>
 		</div>
 
-		<div class="fetched" v-if="true">
+		<div class="fetched" v-if="fetched">
 			<div class="imageCon"><img src="../../assets/Picture1.png" alt="" /></div>
 
 			<div class="main">
@@ -35,6 +35,23 @@
 				</div>
 
 				<div class="header">
+					<div class="status">
+						<v-btn
+							x-small
+							class="success"
+							rounded
+							v-if="this.chapter.tutorial_status == 'Completed'"
+							>You already completed this tutorial</v-btn
+						>
+						<v-btn
+							x-small
+							class="warning"
+							rounded
+							v-if="this.chapter.tutorial_status == 'Redo'"
+							>You failed this tutorial exercise. You need to redo this
+							tutorial</v-btn
+						>
+					</div>
 					<h1 class="lessonHeader">Lesson 3: Summary</h1>
 				</div>
 
@@ -101,17 +118,46 @@
 					<br />
 
 					<div class="next">
-						<v-btn large class="success" rounded to="Final Test/2/confirmation"
+						<v-btn
+							large
+							class="success"
+							rounded
+							v-if="this.chapter.exercise_status != 'Passed'"
+							@click="takeExercise"
 							>Take Test</v-btn
+						>
+
+						<v-btn
+							large
+							class="success"
+							rounded
+							v-if="this.chapter.exercise_status == 'Passed'"
+							@click="takeExercise"
+							>View Test Score</v-btn
 						>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<v-dialog hide-overlay persistent width="300" v-model="loadingDialog">
+			<v-card color="white" light>
+				<v-card-text>
+					<h3 class="dialogText">Saving Progress</h3>
+					<v-progress-linear
+						indeterminate
+						color="black"
+						class="mb-0 mt-5"
+					></v-progress-linear>
+				</v-card-text>
+			</v-card>
+		</v-dialog>
 	</div>
 </template>
 
 <script>
+	import lessonAPI from "../../api/lessonAPI";
+
 	export default {
 		data: () => ({
 			progress: 0,
@@ -123,6 +169,8 @@
 			answered1: false,
 			correct2: false,
 			answered2: false,
+			chapter: {},
+			loadingDialog: false,
 		}),
 		methods: {
 			answerPQ1(answer) {
@@ -145,63 +193,82 @@
 					}
 				}
 			},
-
 			async reload() {
 				try {
 					const lessons = await lessonAPI.prototype.getAllLessons();
+
 					lessons.data.lessons.forEach((element) => {
-						if (
-							element.name == this.$route.params.lessonName.replaceAll("_", " ")
-						) {
+						if (element.name == "Solving Linear Polynomials") {
 							this.lesson = element;
+							element.chapter.forEach((chap) => {
+								if (chap.chapter_name == "Final Test") {
+									this.chapter = chap;
+								}
+							});
 						}
 					});
+					console.log(this.lesson);
+					console.log(this.chapter);
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.lesson);
 				} catch (error) {
 					this.error = true;
 				}
 			},
-		},
-		// async created() {
-		// 	if (!localStorage.getItem("token")) {
-		// 		this.$router.push("/signin");
-		// 	} else {
-		// 		try {
-		// 			const lessons = await lessonAPI.prototype.getAllLessons();
-		// 			lessons.data.lessons.forEach((element) => {
-		// 				if (
-		// 					element.name == this.$route.params.lessonName.replaceAll("_", " ")
-		// 				) {
-		// 					this.lesson = element;
-		// 				}
-		// 			});
-		// 			this.loading = false;
-		// 			this.fetched = true;
-		// 			console.log(this.lesson);
-		// 		} catch (error) {
-		// 			this.error = true;
-		// 		}
-		// 	}
-		// },
 
-		computed: {
-			overallProgress: function() {
-				this.lesson.chapter.forEach((element) => {
-					if (element.tutorial_status == "Completed") {
-						this.progress += 5;
-					}
-					if (element.exercise_status == "Passed") {
-						this.progress += 5;
-					}
-				});
+			async takeExercise() {
+				try {
+					if (this.chapter.tutorial_status != "Completed") {
+						this.loadingDialog = true;
+						const updated = await lessonAPI.prototype.updateChapter(
+							this.lesson._id,
+							this.chapter.chapter_number,
+							{
+								tutorial_status: "Completed",
+								exercise_status: this.chapter.exercise_status,
+								exercise_score: this.chapter.exercise_score,
+							}
+						);
 
-				console.log(this.lesson.chapter);
-				console.log(this.progress);
-				console.log(this.lesson.chapter.length * 10);
-				return (this.progress / (this.lesson.chapter.length * 10)) * 100;
+						this.loadingDialog = false;
+						console.log(updated);
+					}
+
+					if (this.chapter.exercise_status != "Passed") {
+						this.$router.push("Final Test/2/confirmation");
+					} else {
+						this.$router.push("Final Test/2/exercise/result");
+					}
+				} catch (error) {
+					this.error = error;
+				}
 			},
+		},
+		async created() {
+			if (!localStorage.getItem("token")) {
+				this.$router.push("/signin");
+			} else {
+				try {
+					const lessons = await lessonAPI.prototype.getAllLessons();
+
+					lessons.data.lessons.forEach((element) => {
+						if (element.name == "Solving Linear Polynomials") {
+							this.lesson = element;
+							element.chapter.forEach((chap) => {
+								if (chap.chapter_name == "Final Test") {
+									this.chapter = chap;
+								}
+							});
+						}
+					});
+					console.log(this.lesson);
+					console.log(this.chapter);
+					this.loading = false;
+					this.fetched = true;
+				} catch (error) {
+					this.error = true;
+				}
+			}
 		},
 	};
 </script>
@@ -346,5 +413,13 @@
 	.link {
 		color: #4caf50;
 		text-decoration: none;
+	}
+
+	.status {
+		text-align: center;
+	}
+
+	.dialogText {
+		padding-top: 10px;
 	}
 </style>

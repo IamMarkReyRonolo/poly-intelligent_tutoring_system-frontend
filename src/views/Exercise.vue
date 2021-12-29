@@ -56,7 +56,7 @@
 							<div v-if="question.question_number == number">
 								<div class="question">
 									<p>
-										{{ question.question }}
+										<span v-html="question.question"></span>
 									</p>
 								</div>
 								<div class="feedback" v-if="question.answered">
@@ -75,7 +75,7 @@
 										:key="value"
 									>
 										<v-btn
-											width="220"
+											width="270"
 											x-large
 											:class="
 												question.answered

@@ -48,6 +48,18 @@
 				</v-card-text>
 			</v-card>
 		</v-dialog>
+
+		<div class="text-center">
+			<v-snackbar v-model="snackbar" :timeout="timeout">
+				{{ errormessage }}
+
+				<template v-slot:action="{ attrs }">
+					<v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+						Close
+					</v-btn>
+				</template>
+			</v-snackbar>
+		</div>
 	</div>
 </template>
 
@@ -59,6 +71,9 @@
 			username: "",
 			password: "",
 			signInDialog: false,
+			snackbar: false,
+			timeout: 2000,
+			errormessage: "",
 		}),
 		methods: {
 			async signIn() {
@@ -74,10 +89,11 @@
 					this.$router.push("/dashboard");
 				} catch (error) {
 					this.signInDialog = false;
+					this.snackbar = true;
 					if (error.message == "Network Error") {
-						alert(error.message);
+						this.errormessage = error.message;
 					} else {
-						alert("Email or Password is incorrect!");
+						this.errormessage = "Username or Password is incorrect";
 					}
 				}
 			},

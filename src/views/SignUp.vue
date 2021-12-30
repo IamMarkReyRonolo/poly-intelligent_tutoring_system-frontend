@@ -30,6 +30,8 @@
 								label="Age"
 								clearable
 								type="number"
+								min="8"
+								max="90"
 								required
 							></v-text-field>
 							<v-select
@@ -88,6 +90,18 @@
 				</v-card-text>
 			</v-card>
 		</v-dialog>
+
+		<div class="text-center">
+			<v-snackbar v-model="snackbar" :timeout="timeout">
+				{{ errormessage }}
+
+				<template v-slot:action="{ attrs }">
+					<v-btn color="blue" text v-bind="attrs" @click="snackbar = false">
+						Close
+					</v-btn>
+				</template>
+			</v-snackbar>
+		</div>
 	</div>
 </template>
 
@@ -106,6 +120,9 @@
 			repeatPassword: "",
 			items: ["Male", "Female"],
 			signUpDialog: false,
+			snackbar: false,
+			timeout: 2000,
+			errormessage: "",
 		}),
 		methods: {
 			async register() {
@@ -126,7 +143,12 @@
 					this.$router.push("/dashboard");
 				} catch (error) {
 					this.signUpDialog = false;
-					alert(error.message);
+					this.snackbar = true;
+					if (error.message == "Network Error") {
+						this.errormessage = error.message;
+					} else {
+						this.errormessage = "Email is already taken";
+					}
 				}
 			},
 		},

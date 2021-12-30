@@ -329,7 +329,7 @@
 					this.$router.push("/");
 					this.fetched = true;
 					this.loading = false;
-				}, 2000);
+				}, 1000);
 			},
 
 			async reload() {

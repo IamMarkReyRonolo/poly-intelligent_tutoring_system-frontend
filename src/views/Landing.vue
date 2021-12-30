@@ -102,7 +102,7 @@
 	}
 
 	.bgImg {
-		margin-top: -80px;
+		margin-top: -110px;
 		width: 850px;
 	}
 

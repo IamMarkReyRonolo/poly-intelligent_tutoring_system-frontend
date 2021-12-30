@@ -75,8 +75,8 @@
 										:key="value"
 									>
 										<v-btn
-											width="270"
-											x-large
+											width="260"
+											large
 											:class="
 												question.answered
 													? choice.correct_answer
@@ -450,7 +450,7 @@
 	}
 
 	.indicator {
-		min-width: 100px;
+		min-width: 90px;
 		min-height: 7px;
 		background-color: grey;
 		margin: 5px;

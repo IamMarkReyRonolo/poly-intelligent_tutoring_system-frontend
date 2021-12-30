@@ -32,17 +32,17 @@
 							:class="
 								question.answered
 									? question.is_correct
-										? question.question_number == number
+										? value + 1 == number
 											? 'success act'
 											: 'success'
-										: question.question_number == number
+										: value + 1 == number
 										? 'error act'
 										: 'error'
-									: question.question_number == number
+									: value + 1 == number
 									? 'act'
 									: ''
 							"
-							v-for="(question, value) in this.exercises.questions"
+							v-for="(question, value) in shuffle"
 							:key="value"
 						></div>
 					</div>
@@ -50,10 +50,10 @@
 					<div class="problems">
 						<div
 							class="problem"
-							v-for="(question, value) in this.exercises.questions"
+							v-for="(question, value) in shuffle"
 							:key="value"
 						>
-							<div v-if="question.question_number == number">
+							<div v-if="value + 1 == number">
 								<div class="question">
 									<p>
 										<span v-html="question.question"></span>
@@ -368,6 +368,29 @@
 				this.chapterName = this.$route.params.chapterName;
 				this.chapterNumber = this.$route.params.chapterNumber;
 				return this.chapterName;
+			},
+
+			shuffle: function() {
+				let currentIndex = this.exercises.questions.length,
+					randomIndex;
+
+				// While there remain elements to shuffle...
+				while (currentIndex != 0) {
+					// Pick a remaining element...
+					randomIndex = Math.floor(Math.random() * currentIndex);
+					currentIndex--;
+
+					// And swap it with the current element.
+					[
+						this.exercises.questions[currentIndex],
+						this.exercises.questions[randomIndex],
+					] = [
+						this.exercises.questions[randomIndex],
+						this.exercises.questions[currentIndex],
+					];
+				}
+
+				return this.exercises.questions;
 			},
 		},
 	};

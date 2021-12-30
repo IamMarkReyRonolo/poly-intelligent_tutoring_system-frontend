@@ -365,7 +365,6 @@
 					});
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.lesson);
 				} catch (error) {
 					this.error = true;
 				}
@@ -385,8 +384,6 @@
 							});
 						}
 					});
-					console.log(this.lesson);
-					console.log(this.chapter);
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {
@@ -409,7 +406,6 @@
 						);
 
 						this.loadingDialog = false;
-						console.log(updated);
 					}
 
 					if (this.chapter.exercise_status != "Passed") {
@@ -429,7 +425,6 @@
 			if (!localStorage.getItem("token")) {
 				this.$router.push("/signin");
 			} else {
-				console.log("created");
 				try {
 					const lessons = await lessonAPI.prototype.getAllLessons();
 
@@ -443,8 +438,6 @@
 							});
 						}
 					});
-					console.log(this.lesson);
-					console.log(this.chapter);
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {

@@ -87,7 +87,7 @@
 							:key="value"
 							link
 							:to="`${chapter.chapter_number}`"
-							:disabled="chapter.tutorial_status == 'sd'"
+							:disabled="chapter.tutorial_status == 'Locked'"
 						>
 							<div class="chapCon">
 								<div class="chapterNumber">
@@ -150,7 +150,6 @@
 					});
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.lesson);
 				} catch (error) {
 					this.error = true;
 				}
@@ -171,7 +170,6 @@
 					});
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.lesson);
 				} catch (error) {
 					this.error = true;
 				}
@@ -189,9 +187,6 @@
 					}
 				});
 
-				console.log(this.lesson.chapter);
-				console.log(this.progress);
-				console.log(this.lesson.chapter.length * 10);
 				return (this.progress / (this.lesson.chapter.length * 10)) * 100;
 			},
 

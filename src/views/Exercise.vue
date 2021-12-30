@@ -270,26 +270,20 @@
 
 					this.loadingDialog = false;
 
-					console.log(userUpdated);
-
 					this.$router.push("result");
 				} catch (error) {
-					console.log(error);
 					this.error = error;
 				}
 			},
 
 			async reload() {
 				try {
-					console.log(this.lessonName);
 					this.exercises = contentAPI.prototype.getChapterTest(
 						this.lessonName.replaceAll("_", " "),
 						this.chapterNumber
 					);
-					console.log(this.exercises);
 				} catch (error) {
 					this.error = true;
-					console.log(error);
 				}
 			},
 
@@ -321,14 +315,9 @@
 			if (!localStorage.getItem("token")) {
 				this.$router.push("/signin");
 			} else {
-				console.log("what's up");
 				try {
-					console.log("comeee");
 					this.loading = true;
 					const lessons = await lessonAPI.prototype.getAllLessons();
-					console.log("off");
-					console.log(this.$route.params.lessonName.replaceAll("_", " "));
-					console.log(this.$route.params.chapterName);
 					lessons.data.lessons.forEach((element) => {
 						if (
 							element.name == this.$route.params.lessonName.replaceAll("_", " ")
@@ -341,14 +330,7 @@
 							});
 						}
 					});
-					console.log("on");
 					this.lessons = lessons.data.lessons;
-					console.log("howww");
-					console.log(this.lessons);
-					console.log("eyyy");
-					console.log(this.lesson);
-					console.log("oww");
-					console.log(this.chapter);
 
 					this.exercises = contentAPI.prototype.getChapterTest(
 						this.$route.params.lessonName.replaceAll("_", " "),

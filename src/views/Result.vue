@@ -90,7 +90,6 @@
 					this.lessons = lessons.data.lessons;
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.lessons);
 				} catch (error) {
 					this.error = true;
 				}
@@ -102,8 +101,6 @@
 				this.$router.push("/signin");
 			} else {
 				try {
-					console.log(this.chapterName);
-					console.log(this.lessonName);
 					const lessons = await lessonAPI.prototype.getAllLessons();
 
 					lessons.data.lessons.forEach((element) => {
@@ -118,8 +115,6 @@
 							});
 						}
 					});
-					console.log(this.lesson);
-					console.log(this.chapter);
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {

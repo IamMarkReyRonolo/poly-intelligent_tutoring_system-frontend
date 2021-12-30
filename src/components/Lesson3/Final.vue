@@ -207,8 +207,7 @@
 							});
 						}
 					});
-					console.log(this.lesson);
-					console.log(this.chapter);
+
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {
@@ -231,7 +230,6 @@
 						);
 
 						this.loadingDialog = false;
-						console.log(updated);
 					}
 
 					if (this.chapter.exercise_status != "Passed") {
@@ -261,8 +259,7 @@
 							});
 						}
 					});
-					console.log(this.lesson);
-					console.log(this.chapter);
+
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {

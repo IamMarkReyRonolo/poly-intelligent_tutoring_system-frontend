@@ -61,7 +61,7 @@
 									x-large
 									class="titleBtn"
 									to="/Polynomial_Operations/chapters"
-									:disabled="this.lessons[1].status == 'sd'"
+									:disabled="this.lessons[1].status == 'Locked'"
 									>{{ this.lessons[1].name }}</v-btn
 								>
 								<p>
@@ -85,7 +85,7 @@
 									x-large
 									class="titleBtn"
 									to="/Solving_Linear_Polynomials/chapters"
-									:disabled="this.lessons[2].status == 'asd'"
+									:disabled="this.lessons[2].status == 'Locked'"
 									>{{ this.lessons[2].name }}</v-btn
 								>
 								<p>
@@ -120,7 +120,6 @@
 					this.lessons = lessons.data.lessons;
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.lessons);
 				} catch (error) {
 					this.error = true;
 				}
@@ -136,7 +135,6 @@
 					this.lessons = lessons.data.lessons;
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.lessons);
 				} catch (error) {
 					this.error = true;
 				}

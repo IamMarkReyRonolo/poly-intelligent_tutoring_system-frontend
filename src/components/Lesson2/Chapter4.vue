@@ -255,8 +255,7 @@
 							});
 						}
 					});
-					console.log(this.lesson);
-					console.log(this.chapter);
+
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {
@@ -279,7 +278,6 @@
 						);
 
 						this.loadingDialog = false;
-						console.log(updated);
 					}
 
 					if (this.chapter.exercise_status != "Passed") {
@@ -297,11 +295,9 @@
 			if (!localStorage.getItem("token")) {
 				this.$router.push("/signin");
 			} else {
-				console.log("created0");
 				try {
-					console.log("created1");
 					const lessons = await lessonAPI.prototype.getAllLessons();
-					console.log("created2");
+
 					lessons.data.lessons.forEach((element) => {
 						if (element.name == "Polynomial Operations") {
 							this.lesson = element;
@@ -312,8 +308,7 @@
 							});
 						}
 					});
-					console.log(this.lesson);
-					console.log(this.chapter);
+
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {

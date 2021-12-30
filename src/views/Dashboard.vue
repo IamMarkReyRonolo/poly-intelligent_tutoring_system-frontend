@@ -22,12 +22,35 @@
 					<h2 class="profileTitle">Profile</h2>
 					<v-avatar color="grey" size="150"
 						><img
-							v-if="this.user.gender == 'Male'"
+							v-if="
+								this.user.gender == 'Male' &&
+									this.user.name.firstName != 'Mark Rey' &&
+									this.user.name.lastName != 'Ronolo'
+							"
 							src="../assets/avatar-man.png"
 							alt=""/>
 						<img
-							v-if="this.user.gender == 'Female'"
+							v-if="
+								this.user.gender == 'Female' &&
+									this.user.name.firstName != 'Fatima' &&
+									this.user.name.lastName != 'Madrigal'
+							"
 							src="../assets/avatar-woman.png"
+							alt=""/>
+
+						<img
+							v-if="
+								this.user.name.firstName == 'Fatima' &&
+									this.user.name.lastName == 'Madrigal'
+							"
+							src="../assets/picc1.jpg"
+							alt=""/>
+						<img
+							v-if="
+								this.user.name.firstName == 'Mark Rey' &&
+									this.user.name.lastName == 'Ronolo'
+							"
+							src="../assets/picc2.jpg"
 							alt=""
 					/></v-avatar>
 					<h2>{{ this.user.name.firstName }} {{ this.user.name.lastName }}</h2>
@@ -340,8 +363,6 @@
 					this.user = data.data;
 					this.loading = false;
 					this.fetched = true;
-					// console.log(this.user);
-					// console.log(this.lessons);
 				} catch (error) {
 					this.error = true;
 				}
@@ -359,9 +380,6 @@
 					this.lessons = lessons.data.lessons;
 					this.loading = false;
 					this.fetched = true;
-					console.log(this.user);
-					console.log("wassap");
-					console.log(this.lessons);
 				} catch (error) {
 					this.error = true;
 				}
@@ -380,8 +398,6 @@
 						}
 					});
 				});
-				console.log("progress");
-				console.log((this.progress / 110) * 100);
 				return (this.progress / 110) * 100;
 			},
 
@@ -389,29 +405,22 @@
 				if (this.user.checkpoint.lessonid) {
 					this.lessons.forEach((element, index, array) => {
 						if (element._id == this.user.checkpoint.lessonid) {
-							console.log("checkpoint");
-							console.log(element);
 							this.checkpoint = element;
 						}
 					});
 				} else {
 					this.checkpoint = null;
 				}
-				console.log("checkk");
-				console.log(this.checkpoint);
 			},
 			resumeProgress: function() {
 				for (let i = 0; i < this.lessons.length; i++) {
 					if (this.lessons[i].status == "In Progress") {
-						console.log(this.lessons[i].name);
 						return this.lessons[i].name.replaceAll(" ", "_");
 					}
 				}
 			},
 
 			getChapterName: function() {
-				console.log("woooooooooooooo");
-				console.log(this.checkpoint);
 				if (this.user.checkpoint.lessonid) {
 					for (let i = 0; i < this.checkpoint.chapter.length; i++) {
 						if (
@@ -419,8 +428,6 @@
 							this.user.checkpoint.chapter_number
 						) {
 							this.chapter = this.checkpoint.chapter[i];
-							console.log("hello");
-							console.log(this.checkpoint);
 						}
 					}
 				}

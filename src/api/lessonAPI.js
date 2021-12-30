@@ -1,5 +1,5 @@
 import axios from "axios";
-const url = "http://localhost:3000/api/lessons";
+const url = "https://poly-server.herokuapp.com/api/lessons";
 axios.defaults.headers.common["auth-token"] =
 	"Bearer " + localStorage.getItem("token");
 

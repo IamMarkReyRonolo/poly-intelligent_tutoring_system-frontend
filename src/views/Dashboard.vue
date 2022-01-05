@@ -398,8 +398,7 @@
 						}
 					});
 				});
-				// return (this.progress / 110) * 100;
-				return 100;
+				return (this.progress / 110) * 100;
 			},
 
 			getCheckpoint: function() {

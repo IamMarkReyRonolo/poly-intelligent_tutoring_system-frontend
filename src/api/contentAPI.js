@@ -1,5 +1,259 @@
 export default class Content {
 	getChapterTest(lesson_name, chapter_number) {
+		const pretest = {
+			lesson_name: "pretest",
+			chapter_number: 0,
+			questions: [
+				{
+					question_number: 1,
+					question:
+						"Find the degree and constant term of the polynomial x<sup>4</sup> + 7x<sup>3</sup> – 2x. ",
+					choices: [
+						{
+							correct_answer: false,
+							choice: `Degree = 7, constant = 1.`,
+						},
+						{
+							correct_answer: false,
+							choice: "Degree = 1, constant = 7.",
+						},
+						{
+							correct_answer: true,
+							choice: "Degree = 4, constant = 0.",
+						},
+						{
+							correct_answer: false,
+							choice: "Degree = 3, constant = -2.",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 2,
+					question: "Classify this polynomial: 3abc – a + 8b – 2c + 4bc",
+					choices: [
+						{
+							correct_answer: false,
+							choice: `Monomial`,
+						},
+						{
+							correct_answer: false,
+							choice: "Binomial",
+						},
+						{
+							correct_answer: false,
+							choice: "Trinomial",
+						},
+						{
+							correct_answer: true,
+							choice: "more than 3 terms",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 3,
+					question:
+						"What is the classification of the following polynomial equation? x+10 = 0",
+					choices: [
+						{
+							correct_answer: true,
+							choice: `Linear`,
+						},
+						{
+							correct_answer: false,
+							choice: "Quadratic",
+						},
+						{
+							correct_answer: false,
+							choice: "Cubic",
+						},
+						{
+							correct_answer: false,
+							choice: "Quartic",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 4,
+					question:
+						"Classify this polynomial: –5u – u<sup>3</sup> + 8 <sup></sup>",
+					choices: [
+						{
+							correct_answer: false,
+							choice: `Monomial`,
+						},
+						{
+							correct_answer: false,
+							choice: "Binomial",
+						},
+						{
+							correct_answer: true,
+							choice: "Trinomial",
+						},
+						{
+							correct_answer: false,
+							choice: "more than 3 terms",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 5,
+					question: "Add: (3x - 2) + (3x<sup>2</sup> + 6x)",
+					choices: [
+						{
+							correct_answer: true,
+							choice: `3x<sup>2</sup>+9x-2`,
+						},
+						{
+							correct_answer: false,
+							choice: "-x<sup>2</sup>+3x<sup>2</sup>-2x+3",
+						},
+						{
+							correct_answer: false,
+							choice: "x<sup>2</sup>+x+6xy−3y",
+						},
+						{
+							correct_answer: false,
+							choice: "–3x<sup>3</sup>y–4x<sup>2</sup>y<sup>2</sup>–1 ",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 6,
+					question:
+						" Simplify: 9x<sup>2</sup> - (5x<sup>2</sup> - 8) - (-3x - 1)",
+					choices: [
+						{
+							correct_answer: false,
+							choice: `3x<sup>2</sup>+9x-2`,
+						},
+						{
+							correct_answer: true,
+							choice: "4x<sup>2</sup>+3x+9",
+						},
+						{
+							correct_answer: false,
+							choice: "-x<sup>2</sup>+3x<sup>2</sup>-2x+3",
+						},
+						{
+							correct_answer: false,
+							choice: "x<sup>2</sup>+x+6xy−3y",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 7,
+					question: "Evaluate –2x<sup>3</sup>(x<sup>2</sup> – 3x + 4)",
+					choices: [
+						{
+							correct_answer: false,
+							choice: `–2x<sup>5</sup>+6x<sup>4</sup>+8x3`,
+						},
+						{
+							correct_answer: false,
+							choice: "–2x<sup>5</sup>-6x<sup>4</sup>–8x3",
+						},
+
+						{
+							correct_answer: true,
+							choice: "–2x<sup>5</sup>+6x<sup>4</sup>–8x3",
+						},
+						{
+							correct_answer: false,
+							choice: "2x<sup>5</sup>+6x<sup>4</sup>–8x3",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 8,
+					question:
+						"Divide : (18r<sup>5</sup> + 36r<sup>4</sup> + 27r<sup>3</sup>) ÷ 9r",
+					choices: [
+						{
+							correct_answer: true,
+							choice: `2r<sup>4</sup>+4r<sup>3</sup>+3r<sup>2</sup>`,
+						},
+						{
+							correct_answer: false,
+							choice: `-2r<sup>4</sup>+4r<sup>3</sup>+3r<sup>2</sup>`,
+						},
+						{
+							correct_answer: false,
+							choice: "2r<sup>4</sup>-4r<sup>3</sup>+3r<sup>2</sup>",
+						},
+
+						{
+							correct_answer: false,
+							choice: "2r<sup>4</sup>+4r<sup>3</sup>-3r<sup>2</sup>",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 9,
+					question: "Evaluate –2x(y + 3)",
+					choices: [
+						{
+							correct_answer: true,
+							choice: `–2xy–6x`,
+						},
+						{
+							correct_answer: false,
+							choice: "2xy+6x",
+						},
+						{
+							correct_answer: false,
+							choice: "2xy–6x",
+						},
+						{
+							correct_answer: false,
+							choice: "–2xy+6x",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+				{
+					question_number: 10,
+					question: "Find y in the equation: y + 2 = 3y",
+					choices: [
+						{
+							correct_answer: true,
+							choice: `y = 1`,
+						},
+						{
+							correct_answer: false,
+							choice: "y = 5",
+						},
+						{
+							correct_answer: false,
+							choice: `y = -1`,
+						},
+						{
+							correct_answer: false,
+							choice: "y = 2/3",
+						},
+					],
+					answered: false,
+					is_correct: false,
+				},
+			],
+		};
+
 		const lesson1_1 = {
 			lesson_name: "Intro To Polynomials",
 			chapter_number: 1,
@@ -2788,6 +3042,7 @@ export default class Content {
 			lesson2_5,
 			lesson3_1,
 			lesson3_2,
+			pretest,
 		];
 		let result;
 		contents.forEach((content) => {
@@ -2798,7 +3053,7 @@ export default class Content {
 				result = content;
 			}
 		});
-
+		console.log(result);
 		return result;
 	}
 }

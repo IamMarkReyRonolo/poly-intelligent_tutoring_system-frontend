@@ -29,6 +29,10 @@ import Lesson3_2 from "../components/Lesson3/Final.vue";
 import Confirmation from "../views/Confirmation.vue";
 import Exercise from "../views/Exercise.vue";
 import Result from "../views/Result.vue";
+
+import PreTestIntro from "../views/PreTestIntro.vue";
+import PreTest from "../views/PreTest.vue";
+import PreTestResult from "../views/PretestResult.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -70,6 +74,21 @@ const routes = [
 	{
 		path: "/:lessonName/:chapterName/:chapterNumber/exercise/result",
 		component: Result,
+	},
+
+	{
+		path: "/pretest-intro",
+		component: PreTestIntro,
+	},
+
+	{
+		path: "/pretest",
+		component: PreTest,
+	},
+
+	{
+		path: "/pretest-result",
+		component: PreTestResult,
 	},
 
 	{ path: "*", component: NotFound },

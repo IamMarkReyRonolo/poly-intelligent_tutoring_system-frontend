@@ -20,6 +20,70 @@
 			<div class="main">
 				<div class="profile">
 					<h2 class="profileTitle">Profile</h2>
+					<br />
+
+					<v-row justify="center">
+						<div>
+							<v-btn
+								:color="
+									this.user.learner_state == 'Beginner'
+										? 'warning'
+										: this.user.learner_state == 'Average'
+										? 'info'
+										: 'success'
+								"
+								@click.stop="dialog1 = true"
+								small
+								>🎉{{ this.user.learner_state }}🎉</v-btn
+							>
+						</div>
+
+						<v-dialog v-model="dialog1" max-width="650">
+							<v-card>
+								<div class="welcomeMessage">
+									<br />
+									<h1>🎉{{ this.user.learner_state }}🎉</h1>
+
+									<br />
+
+									<h4 v-if="this.user.learner_state == 'Beginner'">
+										Beginner state means that you have only access for lesson 1
+										. Lesson 1 is the "Introduction To Polynomials". To unlock
+										other lessons, you need to complete the tutorials and pass
+										the exercises. In the beginner state, there will be no time
+										limit for questions/exercises.
+									</h4>
+
+									<h4 v-if="this.user.learner_state == 'Average'">
+										Average state means that you have access for 2 lessons.
+										Lesson 1 is the "Introduction To Polynomials" and Lesson 2
+										is the "Polynomial Operations". To unlock the last lesson,
+										you need to complete the tutorials and pass the exercises.
+										In the average state, there will be a time limit of 90
+										seconds for every question.
+									</h4>
+
+									<h4 v-if="this.user.learner_state == 'Advance'">
+										Advance state means that you have access to all 3 lessons.
+										Lesson 1 is the "Introduction To Polynomials". Lesson 2 is
+										the "Polynomial Operations". Lesson 3 is the "Solving Linear
+										Polynomials". In the advance state, there will be a time
+										limit of 1 minute for every question.
+									</h4>
+
+									<br />
+
+									<v-card-actions>
+										<v-spacer></v-spacer>
+										<v-btn color="green darken-1" text @click="dialog1 = false">
+											Close
+										</v-btn>
+										<v-spacer></v-spacer>
+									</v-card-actions>
+								</div>
+							</v-card>
+						</v-dialog>
+					</v-row>
 					<v-avatar color="grey" size="150"
 						><img
 							v-if="
@@ -54,7 +118,14 @@
 							alt=""
 					/></v-avatar>
 					<h2>{{ this.user.name.firstName }} {{ this.user.name.lastName }}</h2>
-					<p>{{ this.user.gender }} | {{ this.user.age }}</p>
+
+					<div>
+						<v-btn color="success" x-small
+							>{{ this.user.gender }} | {{ this.user.age }}</v-btn
+						>
+					</div>
+					<p></p>
+
 					<div>
 						<v-btn color="success" to="/lessons">GO TO LESSONS</v-btn>
 					</div>
@@ -322,6 +393,8 @@
 					</v-card>
 				</v-dialog>
 			</v-row>
+			<br />
+			<br />
 		</div>
 	</div>
 </template>
@@ -342,6 +415,7 @@
 			loading: true,
 			error: false,
 			dialog: false,
+			dialog1: false,
 		}),
 		methods: {
 			logOut() {
@@ -378,6 +452,9 @@
 					const lessons = await lessonAPI.prototype.getAllLessons();
 					this.user = data.data;
 					this.lessons = lessons.data.lessons;
+					if (this.user.learner_state == "To Be Determined") {
+						this.$router.push("/pretest-intro");
+					}
 					this.loading = false;
 					this.fetched = true;
 				} catch (error) {
@@ -437,6 +514,7 @@
 				if (localStorage.getItem("new") != "false") {
 					localStorage.setItem("new", false);
 					this.dialog = true;
+					this.dialog1 = true;
 				}
 			},
 		},

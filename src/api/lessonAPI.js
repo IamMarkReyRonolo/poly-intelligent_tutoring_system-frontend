@@ -23,4 +23,22 @@ export default class API {
 		const chapter = await axios.patch(url + "/" + lessonid, updatedLesson);
 		return chapter;
 	}
+
+	async advanceupdate(updatedLesson) {
+		console.log(updatedLesson);
+		const chapter = await axios.patch(
+			url + "/update/lessons/advance",
+			updatedLesson
+		);
+		return chapter;
+	}
+
+	async averageupdate(updatedLesson) {
+		console.log(updatedLesson);
+		const chapter = await axios.patch(
+			url + "/update/lessons/average",
+			updatedLesson
+		);
+		return chapter;
+	}
 }

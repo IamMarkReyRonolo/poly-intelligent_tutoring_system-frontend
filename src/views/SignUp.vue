@@ -140,7 +140,7 @@
 					this.signUpDialog = false;
 					localStorage.setItem("token", response.data.user.token);
 					localStorage.setItem("new", true);
-					this.$router.push("/dashboard");
+					this.$router.push("/pretest-intro");
 				} catch (error) {
 					this.signUpDialog = false;
 					this.snackbar = true;

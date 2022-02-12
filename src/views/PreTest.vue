@@ -20,11 +20,7 @@
 			<div class="main">
 				<div class="content">
 					<h1 class="lessonHeader">
-						<span v-if="getChapterName == 'Final Test'">{{
-							lessonName.replaceAll("_", " ")
-						}}</span>
-						{{ getChapterName }}
-						<span v-if="getChapterName != 'Final Test'">Exercise</span>
+						Pre-Test
 					</h1>
 					<div class="list">
 						<div
@@ -53,36 +49,6 @@
 							v-for="(question, value) in shuffle"
 							:key="value"
 						>
-							<div v-if="user.learner_state != 'Beginner'">
-								<div
-									class="timer"
-									v-if="value + 1 == number && !question.answered"
-								>
-									<v-progress-circular
-										:rotate="360"
-										:size="80"
-										:width="5"
-										:value="(countDown * 10) / divisor"
-										:color="
-											countDown > 30
-												? 'success'
-												: countDown > 10
-												? 'warning'
-												: 'error'
-										"
-									>
-										{{ countDown }}
-									</v-progress-circular>
-								</div>
-								<div v-if="value + 1 == number">
-									{{ monitor(question) }}
-								</div>
-
-								<div v-if="value + 1 == number && !question.answered">
-									{{ countDownTimer() }}
-								</div>
-							</div>
-
 							<div v-if="value + 1 == number">
 								<div class="question">
 									<p>
@@ -105,7 +71,7 @@
 										:key="value"
 									>
 										<v-btn
-											width="260"
+											width="240"
 											large
 											:class="
 												question.answered
@@ -126,9 +92,7 @@
 
 					<div class="btns">
 						<div class="btn">
-							<v-btn
-								@click="navigate('down')"
-								:disabled="number == 1 || !answered"
+							<v-btn @click="navigate('down')" :disabled="number == 1"
 								>Previous</v-btn
 							>
 						</div>
@@ -169,6 +133,7 @@
 	</div>
 </template>
 
+//
 <script>
 	import lessonAPI from "../api/lessonAPI";
 	import contentAPI from "../api/contentAPI";
@@ -188,7 +153,6 @@
 			clicked1: false,
 			correct: false,
 			number: 1,
-
 			exercises: [],
 			points: 0,
 			exercise_status: "",
@@ -197,10 +161,8 @@
 			newChapterNumber: 0,
 			loadingDialog: false,
 			nextLesson: {},
-			countDown: 0,
-			start: true,
-			user: {},
-			divisor: 1,
+			userData: {},
+			learner_state: "",
 		}),
 		methods: {
 			async viewResult() {
@@ -212,101 +174,30 @@
 						}
 					});
 
-					this.exercise_status = this.points > 7 ? "Passed" : "Failed";
-					const tutorial_status =
-						this.exercise_status == "Passed" ? "Completed" : "Redo";
-					console.log(this.points);
-					console.log(this.exercise_status);
-
-					const updated = await lessonAPI.prototype.updateChapter(
-						this.lesson._id,
-						this.chapter.chapter_number,
-						{
-							tutorial_status: tutorial_status,
-							exercise_status: this.exercise_status,
-							exercise_score: this.points,
-						}
-					);
-					console.log(updated);
+					this.learner_state =
+						this.points > 7
+							? this.points == 10
+								? "Advance"
+								: "Average"
+							: "Beginner";
 
 					const userUpdated = await userAPI.prototype.updateUser({
-						checkpoint: {
-							lessonid: this.lesson._id,
-							chapter_number: this.chapter.chapter_number,
-						},
+						learner_state: this.learner_state,
 					});
 
-					console.log("KASULOOOD");
-					console.log(this.chapter.chapter_number);
-					console.log(this.chapter.chapter_number + 1);
-					console.log(this.lesson.chapter.length);
-					console.log("SUPPPPP");
-
-					if (this.exercise_status == "Passed") {
-						console.log("hello");
-						if (this.chapter.chapter_number + 1 <= this.lesson.chapter.length) {
-							this.newChapterNumber = this.chapter.chapter_number + 1;
-							console.log("new");
-							console.log(this.newChapterNumber);
-
-							const chapterUpdated = await lessonAPI.prototype.updateChapter(
-								this.lesson._id,
-								this.newChapterNumber,
-								{
-									tutorial_status: "Not Yet",
-									exercise_status: "Not Yet",
-									exercise_score: 0,
-								}
-							);
-							console.log(chapterUpdated);
-						} else {
-							let flag = false;
-							for (let i = 0; i < this.lessons.length; i++) {
-								if (this.lesson._id == this.lessons[i]._id) {
-									if (i + 1 != this.lessons.length) {
-										this.nextLesson = this.lessons[i + 1];
-										flag = true;
-									}
-								}
-							}
-							console.log("nextLesson");
-							console.log(this.nextLesson);
-							this.newChapterNumber = 1;
-							const lessonUpdated2 = await lessonAPI.prototype.updateLesson(
-								this.lesson._id,
-								{
-									status: "Completed",
-								}
-							);
-
-							console.log(flag);
-							if (flag == true) {
-								const lessonUpdated1 = await lessonAPI.prototype.updateLesson(
-									this.nextLesson._id,
-									{
-										status: "In Progress",
-									}
-								);
-
-								const chapp = await lessonAPI.prototype.updateChapter(
-									this.nextLesson._id,
-									1,
-									{
-										tutorial_status: "Not Yet",
-										exercise_status: "Not Yet",
-										exercise_score: 0,
-									}
-								);
-								console.log("flag");
-								console.log(lessonUpdated1);
-								console.log(chapp);
-							}
-						}
+					if (this.learner_state == "Advance") {
+						const advanceupdate = await lessonAPI.prototype.advanceupdate({
+							status: "In Progress",
+						});
+					} else if (this.learner_state == "Average") {
+						const averageupdate = await lessonAPI.prototype.averageupdate({
+							status: "In Progress",
+						});
 					}
 
 					this.loadingDialog = false;
 
-					this.$router.push("result");
+					this.$router.push("/pretest-result");
 				} catch (error) {
 					this.error = error;
 				}
@@ -323,18 +214,11 @@
 				}
 			},
 
-			monitor(question) {
-				if (this.countDown == 0) {
-					this.answer(question, false);
-				}
-			},
-
 			answer(question, is_correct) {
 				if (!question.answered) {
 					question.answered = true;
 					question.is_correct = is_correct;
 					this.answered = true;
-					this.start = false;
 				}
 			},
 
@@ -343,27 +227,13 @@
 					if (i + 1 == this.number) {
 						if (direction == "up" && this.number != 10) {
 							this.number += 1;
-							this.start = true;
 						}
 						if (direction == "down" && this.number != 1) {
 							this.number -= 1;
-							this.start = false;
 						}
 						this.answered = this.exercises.questions[this.number - 1].answered;
-						this.countDown = 60;
 						return this.number;
 					}
-				}
-			},
-
-			countDownTimer() {
-				if (this.countDown > 0) {
-					setTimeout(() => {
-						if (this.start) {
-							this.countDown -= 1;
-							this.countDownTimer;
-						}
-					}, 1000);
 				}
 			},
 		},
@@ -374,34 +244,11 @@
 			} else {
 				try {
 					this.loading = true;
-					const user = await userAPI.prototype.getSpecificUser();
-					this.user = user.data;
-					if (this.user.learner_state == "Average") {
-						this.countDown = 90;
-						this.divisor = 9;
-					} else if (this.user.learner_state == "Advance") {
-						this.countDown = 60;
-						this.divisor = 6;
+					this.exercises = contentAPI.prototype.getChapterTest("pretest", 0);
+					this.userData = await userAPI.prototype.getSpecificUser();
+					if (this.userData.data.learner_state != "To Be Determined") {
+						this.$router.push("/dashboard");
 					}
-					const lessons = await lessonAPI.prototype.getAllLessons();
-					lessons.data.lessons.forEach((element) => {
-						if (
-							element.name == this.$route.params.lessonName.replaceAll("_", " ")
-						) {
-							this.lesson = element;
-							element.chapter.forEach((chap) => {
-								if (chap.chapter_name == this.$route.params.chapterName) {
-									this.chapter = chap;
-								}
-							});
-						}
-					});
-					this.lessons = lessons.data.lessons;
-
-					this.exercises = contentAPI.prototype.getChapterTest(
-						this.$route.params.lessonName.replaceAll("_", " "),
-						this.$route.params.chapterNumber
-					);
 
 					this.loading = false;
 					this.fetched = true;
@@ -525,7 +372,9 @@
 	}
 
 	.lessonHeader {
-		margin: 0px 0px;
+		margin: 20px 0px;
+		text-align: center;
+		color: green;
 	}
 
 	.feedback {
@@ -563,10 +412,5 @@
 
 	.dialogText {
 		padding-top: 10px;
-	}
-
-	.timer {
-		text-align: center;
-		padding-bottom: 10px;
 	}
 </style>

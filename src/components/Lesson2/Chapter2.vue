@@ -43,6 +43,18 @@
 							v-if="this.chapter.tutorial_status == 'Completed'"
 							>You already completed this tutorial</v-btn
 						>
+
+						<div>
+							<v-btn
+								x-small
+								class="primary"
+								rounded
+								v-if="this.showHelp"
+								@click="dialog = true"
+								>Show Help</v-btn
+							>
+						</div>
+
 						<v-btn
 							x-small
 							class="warning"
@@ -203,6 +215,62 @@
 					</div>
 				</div>
 			</div>
+
+			{{ timer }}
+			<v-dialog v-model="dialog" max-width="650" v-if="showHelp">
+				<v-card>
+					<div class="welcomeMessage">
+						<br />
+						<div class="welcomeHeader">
+							<h2>Need a hand?</h2>
+							<span>👋</span>
+						</div>
+
+						<br />
+						<p>
+							We noticed that you are taking too long on this tutorial. To help
+							you get through this, here are some of the resources that might
+							help you.
+						</p>
+
+						<v-btn
+							text
+							color="success"
+							href="https://www.purplemath.com/modules/polyadd2.htm"
+							target="_blank"
+							>Resource 1</v-btn
+						>
+
+						<v-btn
+							text
+							color="success"
+							href="https://www.cuemath.com/algebra/subtracting-polynomials/"
+							target="_blank"
+							>Resource 2</v-btn
+						>
+
+						<v-btn
+							text
+							color="success"
+							href="https://www.algebra-class.com/subtracting-polynomials.html"
+							target="_blank"
+							>Resource 3</v-btn
+						>
+
+						<br />
+						<br />
+						<h3><i>Happy Learning</i></h3>
+
+						<v-card-actions>
+							<v-spacer></v-spacer>
+							<v-btn color="green darken-1" text @click="dialog = false">
+								Close
+							</v-btn>
+							<v-spacer></v-spacer>
+						</v-card-actions>
+					</div>
+				</v-card>
+			</v-dialog>
 		</div>
 
 		<v-dialog hide-overlay persistent width="300" v-model="loadingDialog">
@@ -236,6 +304,8 @@
 			answered2: false,
 			chapter: {},
 			loadingDialog: false,
+			dialog: true,
+			showHelp: false,
 		}),
 		methods: {
 			answerPQ1(answer) {
@@ -333,6 +403,18 @@
 					this.error = true;
 				}
 			}
+		},
+
+		computed: {
+			timer: function() {
+				if (this.chapter.tutorial_status != "Completed") {
+					setTimeout(() => {
+						this.showHelp = true;
+					}, 1000 * 60 * 7);
+				} else {
+					this.showHelp = false;
+				}
+			},
 		},
 	};
 </script>
@@ -474,5 +556,37 @@
 
 	.dialogText {
 		padding-top: 10px;
+	}
+
+	.welcomeMessage {
+		padding: 50px;
+		text-align: center;
+	}
+
+	.welcomeMessage h1,
+	.welcomeMessage h2 {
+		color: green;
+	}
+
+	.welcomeMessage h1 {
+		font-size: 50px;
+	}
+
+	.welcomeMessage h2 {
+		font-size: 35px;
+	}
+
+	.welcomeMessage p {
+		font-size: 20px;
+	}
+
+	.welcomeHeader {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.welcomeHeader span {
+		font-size: 30px;
 	}
 </style>

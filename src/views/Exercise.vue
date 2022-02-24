@@ -350,7 +350,11 @@
 							this.start = false;
 						}
 						this.answered = this.exercises.questions[this.number - 1].answered;
-						this.countDown = 60;
+						if (this.user.learner_state == "Average") {
+							this.countDown = 90;
+						} else if (this.user.learner_state == "Advance") {
+							this.countDown = 60;
+						}
 						return this.number;
 					}
 				}

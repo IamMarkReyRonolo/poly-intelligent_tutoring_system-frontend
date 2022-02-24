@@ -392,7 +392,7 @@
 				if (this.chapter.tutorial_status != "Completed") {
 					setTimeout(() => {
 						this.showHelp = true;
-					}, 1000 * 60 * 7);
+					}, 1000 * 60 * 5);
 				} else {
 					this.showHelp = false;
 				}
